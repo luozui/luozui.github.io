@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="应用层网络应用模型客户&#x2F;服务器模型客户是服务请求方，服务器是服务提供方。 P2P模型DNS系统域名系统DNS (Domain Name System)是互联网使用的命名系统，用来把便于人们使用的机器名字转换为IP地址 层次域名空间 每一个标号不超过63个字符，由多个标号组成的完整域名总共不超过255个 字符 不区分大小写字母   域名服务器域名到IP地址的解析是由分布在互联网上的许多域名服务器程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络-应用层">
+<meta property="og:url" content="https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/index.html">
+<meta property="og:site_name" content="LuoZui&#96; Blog">
+<meta property="og:description" content="应用层网络应用模型客户&#x2F;服务器模型客户是服务请求方，服务器是服务提供方。 P2P模型DNS系统域名系统DNS (Domain Name System)是互联网使用的命名系统，用来把便于人们使用的机器名字转换为IP地址 层次域名空间 每一个标号不超过63个字符，由多个标号组成的完整域名总共不超过255个 字符 不区分大小写字母   域名服务器域名到IP地址的解析是由分布在互联网上的许多域名服务器程序">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/传输层/域名.png">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/传输层/树状结构的DNS域名服务器.png">
+<meta property="article:published_time" content="2019-10-06T08:35:05.000Z">
+<meta property="article:modified_time" content="2020-12-02T16:24:16.631Z">
+<meta property="article:author" content="LuoZui">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/传输层/域名.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计算机网络-应用层</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/09/12/%E6%B5%8B%E8%AF%95/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/10/06/%E4%BC%A0%E8%BE%93%E5%B1%82/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&text=计算机网络-应用层"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&is_video=false&description=计算机网络-应用层"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计算机网络-应用层&body=Check out this article: https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&name=计算机网络-应用层&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">应用层</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">网络应用模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.1.</span> <span class="toc-text">客户&#x2F;服务器模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.2.</span> <span class="toc-text">P2P模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">DNS系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">层次域名空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.2.</span> <span class="toc-text">域名服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.3.</span> <span class="toc-text">域名解析过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">FTP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">FTP协议的工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">控制连接与数据连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">电子邮件系统的组成结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.2.</span> <span class="toc-text">电子邮件格式与MIME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.3.</span> <span class="toc-text">SMTP协议与POP3协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">WWW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.1.</span> <span class="toc-text">WWW的概念与组成结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.2.</span> <span class="toc-text">HTTP协议</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计算机网络-应用层
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">LuoZui` Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-06T08:35:05.000Z" itemprop="datePublished">2019-10-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1><span id="应用层">应用层</span></h1><h2><span id="网络应用模型">网络应用模型</span></h2><h3><span id="客户服务器模型">客户/服务器模型</span></h3><p>客户是服务请求方，服务器是服务提供方。</p>
+<h3><span id="p2p模型">P2P模型</span></h3><h2><span id="dns系统">DNS系统</span></h2><p>域名系统DNS (Domain Name System)是互联网使用的命名系统，用来把便于人们使用的机器名字转换为IP地址</p>
+<h3><span id="层次域名空间">层次域名空间</span></h3><ul>
+<li>每一个标号不超过63个字符，由多个标号组成的完整域名总共不超过255个 字符</li>
+<li>不区分大小写字母</li>
+</ul>
+<p><img src="/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/传输层\域名.png" alt="1569580554174"></p>
+<h3><span id="域名服务器">域名服务器</span></h3><p>域名到IP地址的解析是由分布在互联网上的许多域名服务器程序（可简称为域名服务器）共同完成的。域名服务器程序在专设的结点上运行，而人们也常把运行域名服务器程序 的机器称为域名服务器。</p>
+<p><img src="/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/传输层\树状结构的DNS域名服务器.png" alt="1569580719162"></p>
+<p><em>用户购买一个域名后，可以修改解析值以指向特定的权限域名服务器，在权限服务器设置自己的解析，常见的第三方权限服务器服务商如<a target="_blank" rel="noopener" href="https://www.dnspod.cn/">https://www.dnspod.cn/</a></em></p>
+<ul>
+<li><strong>根域名服务器</strong>(root name server)，只有13个域名地址，但截至16年全球已有588个地点安装了根域名服务器</li>
+<li><strong>顶级域名服务器</strong>：这些域名服务器负责管理在该顶级域名服务器注册的所有二级域名。当收到DNS查询请求时，就给出相应的回答(可能是最后的结果，也可能是下一步应当找的域名服务器的IP地址)。</li>
+<li><strong>权限域名服务器</strong>：</li>
+<li><strong>本地域名服务器(local name server)</strong>：</li>
+</ul>
+<h3><span id="域名解析过程">域名解析过程</span></h3><h2><span id="ftp">FTP</span></h2><h3><span id="ftp协议的工作原理">FTP协议的工作原理</span></h3><h3><span id="控制连接与数据连接">控制连接与数据连接</span></h3><h2><span id="电子邮件">电子邮件</span></h2><h3><span id="电子邮件系统的组成结构">电子邮件系统的组成结构</span></h3><h3><span id="电子邮件格式与mime">电子邮件格式与MIME</span></h3><h3><span id="smtp协议与pop3协议">SMTP协议与POP3协议</span></h3><h2><span id="www">WWW</span></h2><h3><span id="www的概念与组成结构">WWW的概念与组成结构</span></h3><h3><span id="http协议">HTTP协议</span></h3>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">应用层</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">网络应用模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.1.</span> <span class="toc-text">客户&#x2F;服务器模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.2.</span> <span class="toc-text">P2P模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">DNS系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">层次域名空间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.2.</span> <span class="toc-text">域名服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.3.</span> <span class="toc-text">域名解析过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">FTP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">FTP协议的工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">控制连接与数据连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">电子邮件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">电子邮件系统的组成结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.2.</span> <span class="toc-text">电子邮件格式与MIME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.3.</span> <span class="toc-text">SMTP协议与POP3协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">WWW</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.1.</span> <span class="toc-text">WWW的概念与组成结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.2.</span> <span class="toc-text">HTTP协议</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&text=计算机网络-应用层"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&is_video=false&description=计算机网络-应用层"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计算机网络-应用层&body=Check out this article: https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&title=计算机网络-应用层"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2019/10/06/%E5%BA%94%E7%94%A8%E5%B1%82/&name=计算机网络-应用层&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 LuoZui
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+
+
+

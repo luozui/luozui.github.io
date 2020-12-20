@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="共识过程为了发布新交易并让其他节点接受（即达成共识），主要过程如下。   节点创建存储单元以存储新交易。 节点根据马尔可夫链蒙特卡洛（MCMC）tip选择算法[12]选择没有冲突的两个tip，并将所选tip的哈希值添加到其存储单元中。  节点发现可以解决密码难题以解决难度目标，这类似于PoW，但是避免垃圾邮件的工作难度非常低。  节点使用其私钥签署新交易并将其广播给其他人。  当其他节点收到它时，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tangle 安全和性能分析 2020">
+<meta property="og:url" content="https://www.lzphi.cn/2020/12/20/Tangleanalysis/index.html">
+<meta property="og:site_name" content="LuoZui&#96; Blog">
+<meta property="og:description" content="共识过程为了发布新交易并让其他节点接受（即达成共识），主要过程如下。   节点创建存储单元以存储新交易。 节点根据马尔可夫链蒙特卡洛（MCMC）tip选择算法[12]选择没有冲突的两个tip，并将所选tip的哈希值添加到其存储单元中。  节点发现可以解决密码难题以解决难度目标，这类似于PoW，但是避免垃圾邮件的工作难度非常低。  节点使用其私钥签署新交易并将其广播给其他人。  当其他节点收到它时，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-20T07:25:28.000Z">
+<meta property="article:modified_time" content="2020-12-20T15:29:23.453Z">
+<meta property="article:author" content="LuoZui">
+<meta property="article:tag" content="blockchain">
+<meta property="article:tag" content="consensus">
+<meta property="article:tag" content="DAG-based">
+<meta property="article:tag" content="security analysis">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Tangle 安全和性能分析 2020</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2020/12/20/Tangleanalysis/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&text=Tangle 安全和性能分析 2020"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&is_video=false&description=Tangle 安全和性能分析 2020"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tangle 安全和性能分析 2020&body=Check out this article: https://www.lzphi.cn/2020/12/20/Tangleanalysis/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&name=Tangle 安全和性能分析 2020&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">共识过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">分叉问题与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">共识过程的马尔可夫链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">系统模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">稳定高负载状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">稳定状态的低负载方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">具有不稳定状态的高负载模式到低负载模式</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Tangle 安全和性能分析 2020
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">LuoZui` Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-12-20T07:25:28.000Z" itemprop="datePublished">2020-12-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/DAG-based/" rel="tag">DAG-based</a>, <a class="tag-link-link" href="/tags/blockchain/" rel="tag">blockchain</a>, <a class="tag-link-link" href="/tags/consensus/" rel="tag">consensus</a>, <a class="tag-link-link" href="/tags/security-analysis/" rel="tag">security analysis</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3><span id="共识过程">共识过程</span></h3><p>为了发布新交易并让其他节点接受（即达成共识），主要过程如下。 </p>
+<ol>
+<li>节点创建存储单元以存储新交易。</li>
+<li>节点根据马尔可夫链蒙特卡洛（MCMC）tip选择算法[12]选择没有冲突的两个tip，并将所选tip的哈希值添加到其存储单元中。 </li>
+<li>节点发现可以解决密码难题以解决难度目标，这类似于PoW，但是避免垃圾邮件的工作难度非常低。 </li>
+<li>节点使用其私钥签署新交易并将其广播给其他人。 </li>
+<li>当其他节点收到它时，它们根据数字签名和随机数检查它是否合法。为了简化以后的分析，我们将过程（1）至（5）定义为新交易的披露阶段。</li>
+</ol>
+<p>之后，将成功检查的新交易作为基于DAG的分类帐中的新tip添加，然后等待通过直接批准和间接批准后续交易进行确认，直到其累计权重达到定义的阈值。此过程定义为新交易的权重积累阶段。</p>
+<h3><span id="分叉问题与解决方案">分叉问题与解决方案</span></h3><p>在区块链中，构建分支以重做工作是篡改公共分类账中存储的数据的唯一方法，因此，为了确保安全性，基于单链的区块链（例如比特币）使用最长的链作为准则，如图所示在图3中。为了最大化其利润，合理的矿工在发生分叉时应在最长的链上工作，因为最长的链被孤立的可能性最低[7]。在Tangle中，尽管基于DAG的分叉拓扑可以支持较高的性能。 IOTA与比特币类似，IOTA使用最重的Tangle来解决派生问题（sub-Tangle）。为此，DAG网络中的一个合理节点应使用MCMCtip。选择算法以扩展最重的Tangle，该Tangle具有最高的总累积权重。与此同时，将不批准总累积权重较小的sub-Tangle。总而言之，比特币中最诚实的矿工和坦格尔中的诚实节点都利用自己的计算能力来防止数据被篡改。</p>
+<h2><span id="共识过程的马尔可夫链">共识过程的马尔可夫链</span></h2><h3><span id="系统模型">系统模型</span></h3><p>回想一下，我们已经将在Tangle中观察到的交易的共识过程分为两个阶段：<strong>揭示阶段和权重积累阶段</strong>。揭示阶段是将观察到的交易附加到基于DAG的分类帐中，以便所有节点都可以看到交易。设揭示阶段的平均持续时间是$h_r$，由计算和传输时间确定。在权重累积阶段，观察到的交易的累积权重从其自身权重逐渐增加到确认阈值（以m表示）。在不失一般性的前提下，我们将每个交易的平均拥有权重归一化为1，因此，观察到的交易的累计权重为1加直接或间接批准该交易的总交易数。</p>
+<p>考虑到Tangle系统中的节点大致独立地分布在大规模IoT网络中，因此有理由假定新交易的到达遵循Poisson过程。设λ为诚实节点发出的新交易的到达率。当新交易到达时，它将使用MCMC算法选择两个tip。 MCMC算法的原理是将一些粒子独立地放置在Tangle分类帐的旧事务上，并让这些粒子执行随机走向tip的操作。为了孤立sub-Tangle，粒子更喜欢以较高的累积权重进行事务处理。由于最重Tangle中相邻事务之间的累计权重之差很小，因此我们可以近似地认为，最重Tangle中的每个tip都可以由MCMC算法以相等的概率随机选择。另一方面，最重的Tangle的总累积权重远大于sub-Tangle的权重，因此MCMC算法将在最重的Tangle中选择tip，而攻击者生成的sub-Tangle将被孤立。</p>
+<p>此外，为了分析网络负载的影响，我们将网络负载分为四种状态：高负载状态（HR），低负载状态（LR），高到低负载状态（H2LR）和低到高负载状态（ L2HR）如下。</p>
+<h3><span id="稳定高负载状态">稳定高负载状态</span></h3><p>在这种情况下，网络负载（事务到达率）保持稳定。 设 $h = 1 /λ$ 为两次交易之间的平均到达时间。当 $h≤h_r$ 时，表示网络负载较高，定义为HR。在Tangle中，新交易直接批准了两个tip后，它将成为一个新tip，并且将覆盖所选的两个tip（它们不再是tip，而其他传入交易也不应直接批准它们）。但是，当 $h≤h_r$ 时，许多新交易将到达较早交易的显示阶段，并且较早交易选择的tip尚未广播到网络。结果，同一笔tip很可能会被数个不同的交易直接批准，因此tip的数量将保持稳定，直观。</p>
+<p>设$L(t)$为时刻t中最重的Tangle中的tip数。==根据[12]中的分析，$L(t)$围绕恒定值 $L$ 波动==，则 $L(t)= L(t-h_r)= L$。从时间 $t-h_r$ 到 $t$ 将有 $λh_r$ 个tip被替换。因此，我们也可以定 $L(t)=r +λh_r$，其中$r$是旧tip数，而$λh_r$是$t-h_r$ 到 $t$期间新事务选择的tip。</p>
+<p>而且，当一个新的事务到达时间t时，我应该从$L(t)$中随机选择tip。由于$λh_r$不再是tip，因此将来从Lhrr的tip选择将影响$L(t)$的数量。如果新交易选择零个Tip 从 $r$ 中，则$L(t)$将增加1；如果选择了一个tip，$L(t)$将保持不变；否则，$L(t)$将减少1。可以在（1）中计算出所选技巧的预期数目。基于$L(t)$的稳定性，我们有 $r=λh_r$</p>
+<h3><span id="稳定状态的低负载方案">稳定状态的低负载方案</span></h3><p>与HR相比，LR是h&gt; hr的情况。在这种情况下，当有新交易到达时，较早的交易已按预期显示给DAG网络。由于一个事务包含两个tip，因此此情况下的典型tip数将下降，并最终变为1。注意，L =2λhris在LR中也可用，其中基于h&gt; hr，L =2λhr≈1。</p>
+<h3><span id="具有不稳定状态的高负载模式到低负载模式">具有不稳定状态的高负载模式到低负载模式</span></h3><p>在[12]中已经探索了在稳定状态下观察到的交易的共识过程（即HR和LR）。在本文中，我们关注不稳定状态下的共识过程。</p>
+<p>事务到达率在HR和LR中是稳定的，可以分别用λhandλl表示。当新的事务到达率突然从λh变为λ时，则处于不稳定状态，定义为H2LR。因此，尖端的数量将从2λhhr（用Lh表示）逐渐减少到2λlhr= 1。</p>
+<p>作为确认水平的度量，令$W(t)$是一个随机过程，表示在时间t处观察到的交易的累计权重。随着时间的推移，随着新交易的批准，它会增加。同时，批准观察到的交易的概率受基于随机选择的提示数L（t）的影响，并且L（t）也是随机过程。因此，当交易到达率变低时，我们可以在下一个时刻具有{W（t），L（t）}的值，该值仅取决于现在并且与过去无关。此外，当事务到达率较低时，我们可以近似地认为事务与DAG网络一一对应。因此，{W（t），L（t）}可以表示为离散时间马尔可夫链{W（k），L（k）}，k = 0,1,2，…∞随着每笔新交易的到来而变化。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">共识过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">分叉问题与解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">共识过程的马尔可夫链</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">系统模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">稳定高负载状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">稳定状态的低负载方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">具有不稳定状态的高负载模式到低负载模式</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2020/12/20/Tangleanalysis/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&text=Tangle 安全和性能分析 2020"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&is_video=false&description=Tangle 安全和性能分析 2020"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tangle 安全和性能分析 2020&body=Check out this article: https://www.lzphi.cn/2020/12/20/Tangleanalysis/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&title=Tangle 安全和性能分析 2020"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2020/12/20/Tangleanalysis/&name=Tangle 安全和性能分析 2020&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 LuoZui
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+
+
+

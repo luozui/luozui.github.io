@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Tangle 白皮书v1.4.3 &#x2F; April 30, 2018本文由 成功大学分散式帐本实验室 翻译 摘要在本论文中我们分析了 IOTA（一种用于物联网 [IoT] 行业的加密货币）中所使用的主要技术。这个新颖的加密货币最主要的特点就是 tangle，以一个有向无环图 (DAG) 存放交易资讯。 tangle 不仅成功的让区块链往前迈进一步，其特性更是符合 M2M 小额支付系统的需求。 本篇论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tangle 白皮书">
+<meta property="og:url" content="https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/index.html">
+<meta property="og:site_name" content="LuoZui&#96; Blog">
+<meta property="og:description" content="Tangle 白皮书v1.4.3 &#x2F; April 30, 2018本文由 成功大学分散式帐本实验室 翻译 摘要在本论文中我们分析了 IOTA（一种用于物联网 [IoT] 行业的加密货币）中所使用的主要技术。这个新颖的加密货币最主要的特点就是 tangle，以一个有向无环图 (DAG) 存放交易资讯。 tangle 不仅成功的让区块链往前迈进一步，其特性更是符合 M2M 小额支付系统的需求。 本篇论">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.imgur.com/o1Tmy1N.jpg">
+<meta property="og:image" content="https://i.imgur.com/pAIglhT.png">
+<meta property="og:image" content="http://i.imgur.com/1vcRSLx.png">
+<meta property="og:image" content="https://i.imgur.com/6Ll3CKH.png">
+<meta property="og:image" content="https://i.imgur.com/LgYKzr2.png">
+<meta property="og:image" content="https://i.imgur.com/Y7118tP.png">
+<meta property="article:published_time" content="2020-12-20T07:23:58.000Z">
+<meta property="article:modified_time" content="2020-12-20T15:28:27.576Z">
+<meta property="article:author" content="LuoZui">
+<meta property="article:tag" content="blockchain">
+<meta property="article:tag" content="consensus">
+<meta property="article:tag" content="DAG-based">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/o1Tmy1N.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Tangle 白皮书</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/12/20/Tangleanalysis/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2020/12/10/EvaluatingPoWConsensusProtocolsSecurity/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&text=Tangle 白皮书"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&is_video=false&description=Tangle 白皮书"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tangle 白皮书&body=Check out this article: https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&name=Tangle 白皮书&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Tangle 白皮书</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">1. 关于系统的一般介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">2. 权重及相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">3. 系统的稳定性和截断集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">结论：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">3.1 累积权重的增长有多快？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.1.</span> <span class="toc-text">结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">4. 可能的攻击情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">4.1 寄生链攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.8.</span> <span class="toc-text">4.2 分裂攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.8.1.</span> <span class="toc-text">结论：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.9.</span> <span class="toc-text">5 抵抗量子计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.10.</span> <span class="toc-text">参考文献</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.1.</span> <span class="toc-text">[1] Iota: a cryptocurrency for Internet-of-Things. See , and </span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.2.</span> <span class="toc-text">[2] bitcoinj. Working with micropayment channels. </span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.3.</span> <span class="toc-text">[3] people on nxtforum.org (2014) DAG, a generalized blockchain. &lt;&#x2F;br&gt; blockchain&#x2F; &lt;&#x2F;br&gt;(registration at nxtforum.org required)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.4.</span> <span class="toc-text">[4] Moshe Babaioff, Shahar Dobzinski, Sigal Oren, Aviv Zohar (2012) On Bitcoin and red balloons. Proc. 13th ACM Conf. Electronic Commerce, 56-73.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.5.</span> <span class="toc-text">[5] Richard Durrett (2004) Probability - Theory and Examples. Duxbury advanced series.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.6.</span> <span class="toc-text">[6] Sergio Demian Lerner (2015) DagCoin: a cryptocurrency without blocks.&lt;&#x2F;br&gt;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.7.</span> <span class="toc-text">[7] Yonatan Sompolinsky, Aviv Zohar (2013) Accelerating Bitcoin’s Transaction Processing. Fast Money Grows on Trees, Not Chains.&lt;&#x2F;br&gt;. pdf</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.8.</span> <span class="toc-text">[9] Yoad Lewenberg, Yonatan Sompolinsky, Aviv Zohar (2015) Inclusive Block Chain Protocols.&lt;&#x2F;br&gt;  &#x2F;inclusive_btc.pdf</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.9.</span> <span class="toc-text">[10] Joseph Poon, Thaddeus Dryja (2016) The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments.&lt;&#x2F;br&gt;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.10.</span> <span class="toc-text">[11] Sheldon M. Ross (2012) Introduction to Probability Models. 10th ed.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.11.</span> <span class="toc-text">[12] David Vorick (2015) Getting rid of blocks. slides.com&#x2F;davidvorick&#x2F;braids</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.12.</span> <span class="toc-text">[13] Amir Dembo, Ofer Zeitouni (2010) Large Deviations Techniques and Applications. Springer.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.13.</span> <span class="toc-text">[14] Sheldon M. Ross (2009) A First Course in Probability. 8th ed.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.14.</span> <span class="toc-text">[15] Gilles Brassard, Peter Hyer, Alain Tapp (1998) Quantum cryptanalysis of hash and claw-free functions. Lecture Notes in Computer Science 1380, 163-169.</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Tangle 白皮书
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">LuoZui` Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-12-20T07:23:58.000Z" itemprop="datePublished">2020-12-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/DAG-based/" rel="tag">DAG-based</a>, <a class="tag-link-link" href="/tags/blockchain/" rel="tag">blockchain</a>, <a class="tag-link-link" href="/tags/consensus/" rel="tag">consensus</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1><span id="tangle-白皮书">Tangle 白皮书</span></h1><p><a target="_blank" rel="noopener" href="https://iota.org/IOTA_Whitepaper.pdf">v1.4.3</a> / April 30, 2018<br>本文由 <a target="_blank" rel="noopener" href="https://dlt.csie.ncku.edu.tw/">成功大学分散式帐本实验室</a> 翻译</p>
+<h2><span id="摘要">摘要</span></h2><p>在本论文中我们分析了 IOTA（一种用于物联网 [IoT] 行业的加密货币）中所使用的主要技术。这个新颖的加密货币最主要的特点就是 <strong><em>tangle</em></strong>，以一个有向无环图 (DAG) 存放交易资讯。 tangle 不仅成功的让区块链往前迈进一步，其特性更是符合 M2M 小额支付系统的需求。</p>
+<p>本篇论文的一个关键贡献是<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo">马可夫链蒙地卡罗</a> (Markov Chain Monte Carlo, MCMC) 演算法。这些演算法会为新的交易选择要接在哪些既有交易之后。</p>
+<h2><span id="1-关于系统的一般介绍">1. 关于系统的一般介绍</span></h2><p>在过去的六年中，比特币的兴起和成功证明了区块链技术的价值所在。然而，这种技术也有许多缺点，阻碍了它成为全球范围内加密货币的唯一平台。在这些缺点中，特别值得提及的就是无法进行小额支付，而小额支付在迅速发展的物联网行业中的重要性不断增加。在现今的系统中，使用者须支付手续费才能产生交易；因此，为了支付极少的金费而须再付好几倍的手续费并不合理。且因手续费为产生区块的人之动机，因此想完全屏除掉并不容易。另外亦须关注的是现存的加密货币都是清楚区分不同角色（如交易发起者，交易验证者）的异质 (heterogeneous) 系统。 ==这种明显区分参与者的设计，容易造成资源抢夺与浪费的现象。 == 这就需要寻找一些完全不同于「基于比特币和其他加密货币的区块链技术」的解决方案。</p>
+<p>在本论文中，我们提出了一个无区块链(blockchainless) 的加密货币系统，称之为IOTA <a href="#1-iota-a-cryptocurrency-for-internet-of-things-see- httpwwwiotatokencom-and-httpsbitcointalkorgindexphptopic12164790">[1]</a>，可用于建立全球范围内基于现有硬体的物联网系统中的一种货币。</p>
+<p>在一般情况下，IOTA 按如下方式运行。如前所述，不存在全域的区块链，取而代之的是一个 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a>（有向无环图），我们称之为 Tangle。通过节点发出的所有交易构成了这个 Tangle（存所有交易的帐本）的集合。这个图的边是这样形成的：当一个新的交易产生，它必须验证之前的两个交易，这些验证关系就通过有向的边来表示，如图1 所示（在图中，时间走向总是从左到右）。如果从交易 A 到交易 B 之间没有直接连接的有向边，而有长度至少大于二的有向边路径存在，我们就说交易 A 间接地验证了交易 B。另外，有一个创世交易 (genesis transaction)，被所有交易直接或间接验证，如图 2。创世交易有以下描述:在最一开始有一个地址 (address) 拥有全部的 token，接着创世交易会把金钱转给其他 founder 的地址。我们强调所有的 token 皆是创世交易所产生的（不会再产生新的 token），而且不会再有「挖矿」就可以收到金钱奖励的概念了。</p>
+<p><strong>术语:</strong></p>
+<p>site<br>: 在 Tangle 图上的交易</p>
+<p>节点 (node)<br>: * 整个网路是由节点组成</p>
+<pre><code>* 也是发起交易者
+</code></pre><p>整个架构的宗旨如下:使用者必须验证其他交易才能发起交易，为整个网路的安全性尽一份力。我们假定节点检查认证的交易是否存在冲突，同时节点不会直接或者间接地认证具有冲突的交易。其想法是随着交易被越来越多的直接或者间接的交易所验证，这个交易就愈会被系统所接受；换句话说，要接受一个<a href="https://en.wikipedia. org/wiki/Double-spending">双重支付</a> (double-spending) 交易是极为困难的(或者至少在实作上是几乎不可能的)。很重要的是我们不会强制规定怎么选择要验证的交易；更确切的说，我们认为如果很大量的节点依循「参考」的规则（这是比较合理的假设，特别是在IoT，节点是装载各式韧体的晶片），各节点就分别遵守其类别的规则</p>
+<p>要发起一个交易，节点需做以下步骤：</p>
+<ul>
+<li>选择两个交易验证（这两笔交易可能会一样）</li>
+<li>检查这两笔交易有无冲突，且有无验证到冲突的交易</li>
+<li>要让一笔交易合法(valid)，节点必须解出一道加密的问题（耗费计算力），与比特币挖矿相似（如: 需要找出一个nonce 让其与其他验证交易的资料的hash 值为特定格式，像是这个hash 值的前面需有几个0）</li>
+</ul>
+<p>通常，我们是一个非同步的网路，因此节点并不会看到一样的交易集合。值得注意的是 tangle 可能存在冲突的交易。节点间并不需要达成共识，因为合法的交易有权继续在tangle 中; 但要是出现冲突的交易，便需要决定哪笔交易要被孤立(orphaned)，也就是这笔交易不会再被新进的交易间接验证。决定哪笔交易是要被孤立的主要准则如下：一个节点进行多次的 tip 选择演算法，接着观察哪笔交易较可能被选到的 tip（间接）验证。举例来说：假设跑了 100 次 tip 选择演算法，有一笔交易被选到 97 次，我们便说它有 97% 的信心被验证到。</p>
+<p>我们也一并说明接下来的问题(cf. <a href="#4-moshe-babaioff-shahar-dobzinski-sigal-oren-aviv-zohar-2012-on-bitcoin-and-red-balloons-proc -13th-acm-conf-electronic-commerce-56-73">[4]</a>)： 是什么动机促使节点们==产生、传播(propagate)== 交易? 事实上，我们布署的节点并没有理由不产生及传播交易。每个节点会计算一些数据，其中之一是计算会从邻居接收多少新的交易。如果某个特定节点「太懒惰」，便会被它的邻居舍弃。所以即使节点并没有发布任何的交易（也因此没有分享新的交易来验证自己交易的动力），他仍然有动机努力工作。</p>
+<p>在随后的章节中，我们要讨论选择两笔交易予以接受纳入系统的演算法，用于衡量整体交易的验证演算法（第3 节，尤其是3.1 节），以及可能会受到的攻击情况（第4 节）。</p>
+<p>此外，应该指出的是，有关有向无环图在加密货币领域中的想法已经有一些时日了，比如文献<a href="#3-people-on-nxtforumorg-2014-dag-a- generalized-blockchain-httpsnxtforumorgproof-of-stake-algorithmdag-a-generalized-blockchain-registration-at-nxtforumorg-required">[3]</a>,<a href="#6-sergio-demian-lerner-2015-dagcoin-a-cryptocurrency- without-blockshttpsbitslogwordpresscom20150911dagcoin">[6]</a>, <a href="#7-yonatan-sompolinsky-aviv-zohar-2013-accelerating-bitcoin%E2%80%99s-transaction-processing-fast-money-grows-on-trees-not- chainshttpseprintiacrorg2013881pdf">[7]</a>, <a href="#9-yoad-lewenberg-yonatan-sompolinsky-aviv-zohar-2015-inclusive-block-chain-protocols-httpwwwcshujiacilavivzpubs15inclusive-btcpdf">[9]</a>, <a href="12-david-vorick -2015-getting-rid-of-blocks-slidescomdavidvorickbraids">[12]</a>。尤其需要指出的是，文献<a href="#7-yonatan-sompolinsky-aviv-zohar-2013-accelerating-bitcoin%E2%80%99s-transaction-processing-fast-money-grows-on-trees- not-chainshttpseprintiacrorg2013881pdf">[7]</a> 中提出的是被称为GHOST 的协议，修改了比特币协议，把主要帐本的结构从区块链改为一棵树(tree); 这样的作法显示，可以降低验证时间并提高整体网路的安全性。在文献<a href="#9-yoad-lewenberg-yonatan-sompolinsky-aviv-zohar-2015-inclusive-block-chain-protocols-httpwwwcshujiacilavivzpubs15inclusive-btcpdf">[9]</a>中，作者们提出了基于DAG 的加密货币模型;和我们所提出的模型不同的是，组成DAG 的是区块(block)，而非独立的交易。且矿工会竞争手续费，新的金钱也会被创造（如同比特币）。再来，文献<a href="#6-sergio-demian-lerner-2015-dagcoin-a-cryptocurrency-without-blockshttpsbitslogwordpresscom20150911dagcoin">[6]</a>中提出了一种类似于我们的解决方案，虽然他并没有讨论任何验证tip的方法。我们也提及了另一种<a href="#2-bitcoinj-working-with-micropayment-channels-httpsbitcoinjgithubioworking-with-micropayments">[2]</a> <a href="#10-joseph-poon-thaddeus-dryja-2016 -the-bitcoin-lightning-network-scalable-off-chain-instant-paymentshttpslightningnetworklightning-network-paperpdf">[10]</a> 针对基于P2P 的比特币小额支付的解决方案。</p>
+<h2><span id="2-权重及相关概念">2. 权重及相关概念</span></h2><p>这里我们定义一个交易的自身权重及其相关概念。交易的权重与发送这笔交易的节点所投入的工作量成正比；在实践中，权重可以假定为 $3^n$ 的一些数值，其中 $n$ 属于有限区间内的正整数。事实上，这与权重是如何增加的并不相干; 重要的是，每一笔交易都有一个正整数的权重。总之，权重愈高该笔交易在 tangle 中也就愈「重要」。我们假设，为了避免各式攻击，没有任何角色 (entity) 可以在短时间内产生大量的「可接受」权重的交易。</p>
+<p><img src="https://i.imgur.com/o1Tmy1N.jpg" alt=""><br>图 1 权重的（重新）计算</p>
+<p>我们所需要的一个重要概念就是一个交易的累积权重：它被定​​义为这个交易的自身权重与其他直接以及间接验证这个交易的所有交易的自身权重之和。累积权重的计算方法如图 1 所示。其中方框代表交易，方框右下角较小的数位表示这个交易的自身权重，而字体较大且加粗的数字是这笔交易的累积权重。例如，交易 F 经交易 A, B, C, E 直接或者间接被验证。交易 F 的累积权重就是交易 F 自身权重及交易 A, B, C 和 E 的各自自身权重之和，即 9= 3 + 1 + 3 + 1 + 1。</p>
+<p>在图 1 中没有被验证的交易（即 “tips”）只有交易 A 和交易 C。若一个新的交易 X 进入系统并且验证交易 A 和 C，那么交易 X 就是系统中唯一的 tip 了，同时系统中其他所有的交易的权重增加 3（即交易 X 的自身权重）。为讨论验证演算法，我们需要引入一些其他的变数。首先，对于 tangle 中的一个点（比如，一笔交易），我们引入它的：</p>
+<ul>
+<li><strong>高度 (height)</strong>: 定义为自创世交易 (genesis) 至当前这个交易的所有路径中最长的长度；</li>
+<li><strong>深度 (depth)</strong>: 定义为自这个交易到某个 tip 的最长路径；<br><img src="https://i.imgur.com/pAIglhT.png" alt=""><br>图 2. 关于交易的积分计算（带圆圈的数字）</li>
+</ul>
+<p>例如，在图 2 中，交易 G 的高度为 1，深度为 3（因为反向路径 F, B, A）； 而交易 D 的高度为 3，深度为 2。接下来，我们引入积分(score)的概念。一笔交易的积分定义为它的自身权重与所有它验证的那些交易的自身权重之和，如图 2 所示。同样的，仅有的 tips 有交易 A 和 C。交易 A 直接或者间接地验证了交易 B, D, F, G，因此交易 A 的积分为 1+3+1+3+1 = 9。同样地，交易 C 的积分为 1+1+1+3+1 = 7。</p>
+<p>事实上，想要了解本论文的证明过程，你可以假设所有交易的权重都为 1。因此，从现在开始，我们会依循这个假设。而现在累积权重就是 1 再加上所有直接或间接验证此笔交易的数量; 积分 (score) 就是此笔交易所直接或间接验证过的交易数量。</p>
+<p>接着注意到，所有的代数中 (目前!) 最重要的就是累积权重(虽然高度、深度以及分数待会也会列入讨论)。</p>
+<h2><span id="3-系统的稳定性和截断集合">3. 系统的稳定性和截断集合</span></h2><p>记 $L(t)$ 为 $t$ 时刻系统中 tips 的总数。当然，大家预期随机过程 (stochastic process) $L(t)$ 保持稳定。更精确地说，是正递回(positive recurrent) 的; 参照第4.4 节以及<a href="#11-sheldon-m-ross-2012-introduction-to-probability-models-10th-ed">[11]</a> 的6.5截处，有更正式的定义; 正递回指的是当$t\to\infty$，$\mathbb{P}\big[L(t)=k\big]$ 的极限应存在且为正值$\forall k\geq 1$。直观上， $L(t)$ 应当围绕一个恒定的常数波动，而不是趋于无穷大（这样的话系统中会存在大量未经验证的交易）。</p>
+<p>为了分析 $L(t)$ 的稳定性，我们需要一些前提假设。其中一个就是，当有一个独立的节点它产生了一个大权重的交易，因此新进交易的整个过程可以以帕松分布为模型(比照<a href="#11-sheldon-m-ross-2012 -introduction-to-probability-models-10th-ed">[11]</a> 的5.3 节)。假设 $\lambda$ 为交易输入流的速率（帕松过程）；为简单起见，我们假定交易输入流的速率保持恒定。假设所有的设备都具有近乎同等的计算能力；并假定系统总交易数为$N$，其中$L$ 个tips 的情形下，一台设备要发送一笔交易所需要计算的平均时间为$h$ 。我们假定所有节点都符合以下模式:</p>
+<p>即在要发送一笔交易的时候，节点从tips 中随机任意选择两个并验证它们。须注意到的是，对「诚实的节点」而言，采用此方法并不是一个好主意。有几个缺点，它并不能有效的抵制「懒惰的节点」和恶意的节点(参照第 4.1 节)。但我们仍把这个方法纳入讨论，因为其较简单分析，而且读者也接着会一窥较复杂的 tip 选择演算法。</p>
+<p>接下来我们做进一步的简化，当一个节点发送，我们需要经过时间h之后才会发现它不是原本的状态了。这代表一个交易在时间t接上tangle24数字大概落在$L_0$上下，在接下来我们会计算$L_0$由$\lambda$与$h$建立的函数。</p>
+<p>我们发现，在一个给定的时间$t$，我们有约$\lambda h$的”隐藏的的tip”(这些tips是在在时段$[t-h,t)$接在tangle上，所以它们尚未能在tangle上被看到)；接着我们假设有$r$个”显现的tips”(在$t-h$之前接上tangle的tips)，所以得出$L_0=r+\lambda h$。由于tips的总数是稳定的，我们或许可假定有$\lambda h$个交易，在$t-h$的时候为tips而在时间t时已不是了。现在考虑一个全新的交易被引进的情况；则这个交易会approve到tips的机率为$r/(r+\lambda h)$(因为这里有r个tips，而这里也有$\lambda h$已经不是tips但节点误以为是)，所以选择到tips的期望值是$2r/(r+\lambda h)$。我们可以发现一个重要的现象，在稳定的状态中，选择到tips的期望值为$1$，因为平均而言，一个新进的交易并不会改变tips的总数。解$2r/(r+\lambda h)$，可以得到$r=\lambda h$，以及</p>
+<p>(1)$L_0=2\lambda h$</p>
+<p>我们在这里注记，如果今天规则改成一个交易会去验证k个交易，而非两个，则我们有类似的计算结果:</p>
+<p>(2)$L^{(k)}_0=\dfrac{k\lambda h}{k-1}$</p>
+<p>理所当然的，$L^{(k)}_0$会趋近于$\lambda h$当$t$趋近无限大(基本上，剩下的tips会是那些网路上尚未可见到的)</p>
+<p>我们回去考虑会有两个交易会被approve的情况，一个交易第一次被approve期望的时间大约为$h+L_0/(2\lambda)=2h$。因为根据我们的假设，在第一个h时间之前，交易是不会被approved的。接下来验证此交易的帕松过程的速率为$(2\lambda)/L_0$（可参考文献<a href="#11-sheldon-m-ross-2012-introduction-to-probability-models- 10th-ed">[11]</a>中的定理5.3，说明了当我们以不同类别独立分类每个帕松过程，那么各个类别的帕松过程是相互独立的）。</p>
+<p>同时，注意到（至少在交易节点试图验证tips 的情况下）对任意固定$t$ 时刻，在某一个阶段$s\in\big[t,t+h(L_0,N)\big]$ 内那些tips 构成了一个截断集合(cutset)，意味着在时间$t’&gt; t$ 时发起的交易到创世交易的任何路径都必须通过这个集合。至少在某些偶然的情况下这个截断集合变得非常小，这是极为重要的。我们也许可以使用这个较小的截断集合作为检查点，作为 DAG 可能的剪枝或者其他用途。</p>
+<p>上述「纯随机」策略实际上并不太好，因为这种策略不会鼓励节点验证交易：比如「懒惰」的用户也许总是去验证几个较早的固定交易（因此也就没有贡献到最新交易的验证），而这种行为也不会受到惩罚。为消除这类行为，我们需要采用一种策略，以便使得新进交易偏向于选择验证那些具有较高分数 (score) 的 tips。恶意的节点也可以人工的制造大量 tips(如产生大量交易只验证几组就交易)，让新交易能有极高机率选择 tips，且有效的舍弃「诚实」节点的 tips。==为了避免这个行为，我们得采用另一种方法，让新进交易偏向选择「好」的 tips。在 4.1 节有一个此种策略的例子。==</p>
+<p>因此，在这种情况下，求解一笔交易第一次被验证所需要的时间的期望值，就有一点复杂了。我们分两个区间进行分析，如图 3 所示。</p>
+<ul>
+<li><strong>低负载区</strong>：tips 的数量很少，常常只有 1 个。当交易流足够慢时会发生，不太可能发生不同的交易验证同一个 tip 的情况。而且若网路延迟很短且设备运算的速度很快，也不大可能会有大量 tips 出现的情况。即使是在交易流的很快的情况下也是如此。此外，我们也应假设不会有攻击者产生大量的交易以膨胀 tips 数量。</li>
+<li><strong>高负载区</strong>：tips 的数量很多。当交易流很大且计算力与网路的延迟很长时便可能会让多笔不同交易验证到同一个 tip。</li>
+</ul>
+<p><img src="http://i.imgur.com/1vcRSLx.png" alt=""><br>图 3. Tangle 及其在低负载和高负载情况下典型的 tip 集合（具有阴影的方框）。需要注意的是 在高负载情况下，一些交易也许需要等待较长时间从而得到<br>第一次验证。</p>
+<p>在低负载区域，这种情况就相对简单：在$\lambda^{-1}$ 的时间尺度上会发生第一次验证， 因为第一个（或者第一批中的一个）进入的交易将会验证我们的这些交易。</p>
+<p>现在我们来考虑高负载区域的情况，也就是当 $L_0$ 很大的时候。如上面所提到的，我们可以假设验证其他 tips 的帕松事件是相互独立且其机率近似 $2\lambda/L_0$。因此，我们预期一笔交易被第一次验证的时间约为 $L_0/(2\lambda)\approx1.45h$ (1)。值得一提的是，更好的验证策略(较偏袒「好」的tips)，被动的花费大量时间等待交易被验证并不是个好主意，这是因为「好」的tips 会不断的出现且也常被选择验证。甚至当交易在等待被验证的时间太长时(如，花费比$L_0/(2\lambda)$ 还长的时间)，一个好的办法就是另外发起一个空交易，也就是发起一个新的空白交易并去验证我们的交易与其他「好」的tip(因此这个空白交易会有很大的机会被验证)。</p>
+<p>接下来，注意到基于高度和积分的验证策略可能会受到特定类型的攻击，见 4.1 节分析。我们将在那一节中讨论更加详细的策略来防止这样的攻击。无论如何，这种最简单的tip 选择策略（「随机验证两笔交易」）仍然是值得考虑的，因为这对于分析来说最简单，从而也许会给出系统行为方面的一些定性和定量方面的理解。</p>
+<h3><span id="结论">结论：</span></h3><ol>
+<li>我们区分了两个区间，低负载和高负载区间，如图 3 所示。</li>
+<li>在低负载区，通常没有多少tips（比如说，一个或者两个），一个tip 在$\Theta(\lambda^{-1})$ 时间尺度内得到第一次验证，其中$\lambda $ 是进入系统内的交易流速度。</li>
+<li>在高负载区，tips 的典型数量取决于验证策略（比如，新的交易如何选择其 他的两个交易进行验证）。</li>
+<li>对于 「随机验证两个 tips」 策略，tips 的典型数量由公式（3）确定。可以看到这种策略在 tips 的典型数量上是理想的，但是在实际中不会选用这种策略， 因为这策略不会鼓励新的交易去验证 tips。</li>
+<li>然而，我们需要更多精细的策略，这类策略将在 4.1 节中进行讨论。</li>
+<li>在高负载区，一个 tip 获得验证所需要的时间尺度为 $\Theta(h)$，其中 $h$ 是一个节点的平均计算/传播扩散时间。但是，如果在上述时间间隔内没有获得第一个验证，那么（对于交易产生者或者接收者）一个好的方法就是额外发送一笔空白交易来提高验证速度。</li>
+</ol>
+<h2><span id="31-累积权重的增长有多快">3.1 累积权重的增长有多快？</span></h2><p>很显然的，在低负载区，交易被验证几次后，它的累积权重将以 $\lambda$ 的速度增加，因为本质上来说所有新的交易都将间接指向我们的交易。</p>
+<p>而在高负载区，一个旧且具有较大的累积权重的交易，其累积权重会因为其他心交易会间接指向它而以 $\lambda$ 的速度增加。当然，我们看到刚开始的时候交易需要等待一定的时间被验证，很显然其累积权重在初始时会以较为无规的形式增长。为了弄明白一个交易在得到几个验证之后其累积权重的变化行为，我们记$H(t)$ （为简单起见，我们自发起交易开始计时）为$t$ 时刻该交易的累积权重期望值，并用$K(t)$ 表示在$t$ 时刻验证我们的这笔交易的tips 数量的期望值。在此，我们简记为 $h:=h(L_0,N)$。同时，我们做一个简化假设，认为 tips 的总数大体保持恒定不变（等于 $L_0$ ）。这里我们采用「随机验证两个 tips」的策略；可期望其结果大体上与其他合理的策略所得到的一样。</p>
+<p>在 $t$ 时刻进入系统中的一笔交易通常是基于 $t-h$ 时刻时系统的状态，来选择两笔交易进行验证(因为节点在发起交易前必须进行运算/验证)。不难得到至少验证一个我们的tip 的机率是$1-\big(1-\dfrac{K(th)}{L_0}\big)^2=-\dfrac{K(th)}{L_0}\big (2-\dfrac{K(th)}{L_0}\big)$ (等号左手边的1 减掉2 个不是我们的tips 被验证的机率)，因此我们可以写下如下的微分方程（类似于文献<a href="#11-sheldon-m-ross-2012-introduction-to-probability-models-10th-ed">[11]</a>中的例子6.4）：</p>
+<p> $H(t+\sigma)=H(t)+\lambda\sigma\dfrac{K(th)}{L_0}\big(2-\dfrac{K(th)}{L_0}\big)+o( \sigma)$</p>
+<p>我们可以化简式子为︰<br>(3) $\dfrac{dH(t)}{dt}=\lambda\dfrac{K(t-h)}{L_0}\big(2-\dfrac{K(t-h)}{L_0}\big)$</p>
+<p>为了能够使用方程(3)，我们首先需要计算 $K(t)$。如何立刻去计算$K(t)$ 是很困难的，因为在$th$ 时刻的一个tip 也许在$t$ 时刻已经不是一个tip，并且，在新进入的交易验证了这样一个tip 的情况下，那么验证原来交易的tips 总量就会增加1 个。现在，根据（1）和（3）可以观察到关键的问题是在 $t-h$ 时刻的一个 tip 在 $t$ 时刻仍然保持为 tip 的机率为 $1/2$。因此，在 $t$ 时刻，有一半的 $K(t-h)$ 的「以前」的 tips 仍然保持为 tips，而另一半已经至少被一笔交易所验证。让我们用A 表示（大概）$K(th)/2$ 的tips 为在$th$ 到$t$ 时刻仍然保持为tips 的这些交易的集合，而用B 表示另外一半在$t$ 时刻已经被验证过的tips。假定新进入的交易至少验 证了集合 B 中一笔交易而没有验证集合 A 中任何交易的机率为 $p_1$；同时假设同时验证了两笔集合 A 中的交易的机率为 $p_2$ 。显然， $p_1$ 和 $p_2$ 分别对应于在新交易到达时，目前「我们」的 tips 增加或者减少 1 的机率。因此，得到一些基本关系式：</p>
+<p>$p_1=\big(\dfrac{K(th)}{2L_0}\big)^2+2\times\dfrac{K(th)}{2L_0}\big(1-\dfrac{K(th)} {L_0}\big)$</p>
+<p>$p_2=\big(\dfrac{K(t-h)}{2L_0}\big)^2$</p>
+<p>(为了达到第一个叙述，观察到$p_1$ 等于都验证B 集合的机率与第一个验证B 集合且第二个不是A 或B 集合的机率之和) 类似方程式（4），关于$K (t)$ 有如下微分方程：</p>
+<p>(4) $\dfrac{dK(t)}{dt}=(p_1-p_2)\lambda=\lambda\dfrac{K(th)}{L_0}\big(1-\dfrac{K(th)} {L_0}\big)$</p>
+<p>仍然很难准确地求解方程（4），因此我们进一步进行简化假设。首先，我们可以看到，对于任意固定$\epsilon &gt;0$ , 在当$K(t)$ 达到$\epsilon L_0$ 水准之后，$K(t)$ 将会迅速增长到$(1- epsilon)L_0$ 。现在，当 $K(t)$ 相对于 $L_0$ 非常小的时候，我们可以舍弃掉方程（4）右边最后一项。同时，用$K(t)-h\dfrac{dK(t)}{dt}$ 代替$K(th)$ ，我们可以得到方程（4）的简化版（记住$\dfrac{\lambda h }{L_0}=\dfrac{1}{2}$):</p>
+<p>(5) $\dfrac{dK(t)}{dt}\approx\dfrac{1}{2h}K(t-h)$</p>
+<p>其中边界条件为 $K(0)=1$。我们打算寻$K(t)=exp(c\dfrac{t}{h})$形式的解；带入(5)之后，我们得到:<br>$\dfrac{c}{h}exp\big(c\dfrac{t}{h})\approx\dfrac{1}{2h}exp\big(c\dfrac{t}{h}-c)$</p>
+<p>因此，<br>(6)$K(t)=exp\big(W(\dfrac{1}{2})\dfrac{t}{h})\approx exp\big(0.352\dfrac{t}{h})$<br>这是一个近似解，这里的W(。)是所谓的Lambert W-function。同时对式(6)左右两边取对数，我们可以得到K(t)2达到$\epsilon L_0$所需要的时间大约为:<br>(7) $t_0\approx\dfrac{h}{W\big(\dfrac{1}{2})}\times(lnL_0-ln\epsilon^{-1})\lesssim2.84hlnL_0$</p>
+<p>再回到方程（3）（并且，如前面一样，舍弃掉右边最后一项），我们可以得到在「调整阶段」（例如，在$t\leq t_0$ 的时候， $t_0$ 为（7）式的结果）具有如下方程：</p>
+<p>${dH(t)\over dt} \approx {2\lambda\over L_0}K(th) \approx {1\over h \space exp\bigl(W({1\over 2})\bigl)} exp\bigl(W({1\over 2}){t\over h}\bigl) \ = {2W({1\over 2})\over h}exp\bigl(W({1\over 2 }){t\over h}\bigl)$</p>
+<p>因此，<br>(8) $H(t)\approx 2exp(W\big(\dfrac{1}{2}))\approx 2exp(0.352\dfrac{t}{h})$</p>
+<p><img src="https://i.imgur.com/6Ll3CKH.png" alt=""><br>图 4. 累积权重的增长</p>
+<p>在此提醒读者，如前述所讨论的，在调整阶段之后，累积权重 $H(t)$ 会随着速度 $\lambda$ 线性增长。我们需要强调的是在（9）式中的「指数增长」并不意味着在调整阶段累积权重增长「十分的迅速」，图 4 中表示了其行为。</p>
+<p>同时，我们认为这一节中的计算在可以轻易的套用在平均 $s&gt;1$ 笔交易的情况下。在那样的情况下，只需要在（2）中将2 用$s$ 代替（但是在（4）中不可以），并在（3）和（6）-（9）中把$\ln2$替换为$\ln{s}$ 。</p>
+<h3><span id="结论">结论</span></h3><ol>
+<li>在低负载区，在我们的交易被验证过几次之后，其累积权重将以 $\lambda w$ 的速度增长，其中 $w$ 是一笔普通交易的平均权重。</li>
+<li>在高负载区，同样的，在我们的交易被验证过几次之后，其累积权重在所谓的调整区间按照公式（8）不断加速增长，而在调整阶段完成之后，其增长速度为$ \lambda w$ ，如图4 所示。事实上，对于任何合理的策略，交易的累积权重经过调整阶段之后，都将以上述速度增长，因为本质上来说，所有新进入系统的交易都将间接验证我们的交易。</li>
+<li>可以想像调整阶段就是直到大部分的 tips 都间接验证我们的交易的时候。公式（7）中给出了典型的调整阶段时间长度。</li>
+</ol>
+<h2><span id="4-可能的攻击情况">4. 可能的攻击情况</span></h2><p>让我们在讨论一个攻击方案，当攻击者试图「赶上」整个网路：</p>
+<ol>
+<li>攻击者付款给商家，在商家认为交易已经获得了足够大的累积权重之后，攻击者拿到了商品；</li>
+<li>接下来攻击者发布了一笔双重支付的交易；</li>
+<li>攻击者同时发送大量较小的交易（非常多，使用它所有的计算能力），这些交易不直接或者间接验证原始的付款交易，而是去验证那笔双重支付的交易；</li>
+<li>可以看到攻击者也许就拥有大量的女巫攻击身份，并且不对 tips 进行验证；</li>
+<li>在第3 步中，也可以采用另外的一种方案，攻击者使用所有它的计算能力去发送一笔「大」的双重支付交易（具有非常大的自身权重），并验证在原始付款交易之前的交易；</li>
+<li>攻击者期望他的 sub-DAG 超越主体 DAG，从而使得 DAG 持续从攻击者的双重支付交易进行增长，以便使得之前合法的支付交易被抛弃掉（如图 5 所示）。</li>
+</ol>
+<p>事实上，接下来我们可以看到这种大权重的双重支付交易策略可以增加攻击者成功的机率。而且，在这种数学模型的「理想」情况下，这种攻击「总是」可以成功的。</p>
+<p>假设 $W^{(n)}$ 为获得权重为 $3^n$ 的双重支付交易的 nonce 的时间。我们可以假设$W^{(n)}$ 是一个以$\mu3^{-n}$ 为参数（比如，期望值为$\mu^{-1}3^{n}$ ）的指数分布的随机变数，其中$\mu$ 表示攻击者的计算能力。</p>
+<p><img src="https://i.imgur.com/LgYKzr2.png" alt=""><br>图 5 「大权重」攻击</p>
+<p>假设商家在一笔合法交易的累积权重达到至少$w_0$（这对应这笔原始交易经过$t_0$ 个时间单位）之后才被接受，因此可以认为其累积权重将以线性速度$\lambda w$ 增长，其中$\lambda$ 是系统中交易（由诚实使用者发送的交易）的总体到达速率，而$w$ 是一般交易的平均权重。记 $w_1=\lambda wt_0$ 为在商家接受交易时合法分支的总权重。</p>
+<p>假设$\lceil x\rceil$ 是大于或等于$x$ 的最小整数，定义$n_0=\lceil\dfrac{\ln{w_1}}{\ln3}\rceil$ ，那么$3^{n_0}\geq w_1$ （事实上，如果$w_1$ 较大，$3^{n_0}\approx w_1$ ）。如果在 $t_0$ 时间间隔内，攻击者设法获得了一个 nonce 以使得权重至少为 $3^{n_0}$，那么攻击就成功了。这种成功攻击的概率是<br>$\mathbb{P}\Big[W^{(n_0)}&lt;t_0\big]=1-\exp\big(-3^{-n_0}t_0\mu\big)\approx1-\exp\big( -t_0\mu w_1^{-1}\big)\approx\dfrac{t_0\mu}{w_1}$</p>
+<p>（至少在 $\dfrac{t_0\mu}{w_1}$ 很小的情况下，这是合理的假设）。然而，如果这种「即刻」攻击没有成功的话，攻击者可以继续寻找nonce 以使得权重为$3^n$ ，其中$n&gt;n_0$，并希望在找到nonce 的时候，合法交易分支的总权重要小于$3^n$。这种情况的概率是<br>$\mathbb{P}\Big[\lambda wW^{(n_0)}&lt;3^n\big]=1-\exp\big(-\mu3^{-n_0}\times\big(3^{- n_0}/\lambda w\big)\big)=1-\exp\big(-\mu/\lambda w\big)\approx\dfrac{\mu}{\lambda w}$</p>
+<p>也就是说，尽管 $\dfrac{\mu}{\lambda w}$ 一般情况下应该是很小，在每一个 $n$ 值水准下，攻击成功具有恒定的机率。因此，最终总是可以攻击成功。事实上，攻击成功的典型耗时大概是 $3^{\lambda w/\mu}$ 。尽管这个数量也许非常大，但是「第一次」（在时间 $t_0$ 内）成功攻击的机率依然不会很小。因此我们得到如下的结论：我们需要对策（如前面第 3 节所提到的，后面的那种策略也许不是最好的方案，因为那样不能为垃圾交易攻击提供足够的保护）。</p>
+<p>那么现在我们来讨论当最大权重具有上限，比如说上限为 1 的时候，估算攻击成功的概率。</p>
+<p>假设给定的一笔交易在发送后经过 $t_0$ 时间单位后，获得累积权重为 $w_0$ ，并假设这笔交易的调整阶段已经结束，因此其累积权重以 $\lambda$ 的速度线性增长。现在，攻击者试图对这笔交易进行双重支付攻击；因为在第一笔交易发送的时候，他私下秘密准备了双重支付交易，并且开始生成其他的交易来验证这笔双重支付交易。如果在一定的时候（在商家决定接受第一笔合法的交易之后），攻击者的 Subtangle 的权重要大于合法交易 Subtangle 的权重的话，双重支付攻击就会成功。如果上述条件不成立的话，那么双重交易就不会被其他交易验证（因为合法的交易将获得更多的累积权重并且所有新的tips 都会间接验证这笔交易），因此双重支付也就成为了孤立交易了。</p>
+<p>如前所述，假定 $\mu$ 为攻击者的计算能力(交易的产生速度)，我们也假设交易是立即被传播出去的。假定$G_1,G_2,G_3…$ 是以$\mu$ 为参数（期望值为$1/\mu$）的独立同分布的指数分布变数，并记$V_k=\mu G_k$，$k geq1$。很显然，$V_1, V_2,V_3…$ 是以 1 为参数的独立同分布的指数分布的变数。</p>
+<p>假设在 $t_0$ 时刻商家决定接受交易（记住这时这笔交易的累积权重为 $w_0$ ）。让我们来估算一下攻击者成功完成双重支付攻击的机率。记$M(\theta)=(1-\theta)^{-1}$ 是以1 为参数的指数分布的随机变数的生成函数的矩（参考文献<a href="#14-sheldon- m-ross-2009-a-first-course-in-probability-8th-ed">[14]</a>中7.7 节）。对于 $\alpha\in(0,1)$，<br>于是有如下公式成立:<br>(10) $\mathbb{P}\Big[\sum_{k=1}^{n}V_k \leq\alpha n\Big]\approx\exp\big(-n\varphi(\alpha)\big) $</p>
+<p>其中 $\varphi(\alpha)=-\ln{\alpha}+\alpha-1$ 是对 $\ln{M(-\theta)}$ 的拉格朗日变换。请注意，作为一个一般事实，对于任意 $\alpha\in(0,1)$，$\varphi(\alpha)&gt;0$ 是成立的（想像指数随机变数 Exp(1)的期望值等于 1）。</p>
+<p>假定 $\dfrac{\mu t_0}{w_0}&lt;1$（否则，攻击者的 Subtangle 最终超过合法的机率就接近于 1）。现在，为了在 $t_0$ 时刻超过 $w_0$ ，攻击者需要在 $t_0$ 时间单位内至少发送具有 $w_0$ 笔权重为 $m$ 的交易。因此，通过公式（10），我们可以得到双重支付交易在 $t_0$ 时刻有更大累积权重的机率大概是<br>(11) $P\Big[\sum_{k=0}^{w_0/m}G_k &lt;t_0\Big]=P\Big[\sum_{k=1}^{w_0}V_k &lt;\mu t_0\Big ]=P\Big[\sum_{k=1}^{w_0}V_k &lt;w_0\times\dfrac{\mu t_0}{w_0}\Big]\approx\exp\Big(-w_0\varphi\big( dfrac{\mu t_0}{w_0}\big)\Big)$</p>
+<p>也就是说，上述机率非常小，我们通常需要的$\dfrac{w_0}{m}$ 是相当大，并且$\varphi\big(\dfrac{\mu t_0}{w_0}\big)$ 不能很小。</p>
+<p>类似地，双重交易在 $t\geq t_0$ 时具有更大的累积权重的概率大概是</p>
+<p>(12) $\exp\Big(-(w_0+\lambda(t-t_0))\varphi\big(\dfrac{\mu t}{w_0+\lambda(t-t_0)}\big)\Big)$</p>
+<p>注意到，通常我们有 $\dfrac{\mu t_0}{w_0}\geq\dfrac{\mu}{\lambda}$（因为在调整阶段，累积权重增长的速度小于 $\lambda$ ）。</p>
+<p>无论如何，可以得到成功进行双重支付的机率大概为</p>
+<p>(13) $\exp\Big(-w_0\varphi\big(max(\dfrac{\mu t_0}{w_0},\dfrac{\mu}{\lambda})\big)\Big)$</p>
+<p>比如，假设 $\mu=2$, $\lambda=3$（因此攻击者的计算能力只是比网路中其他算力稍微小一点点）。假设在时间 12 的时候，交易获得累积权重为 32。那么， $max(\dfrac{\mu t_0}{w_0},\dfrac{\mu}{\lambda })=\dfrac{3}{4}$, $\varphi\Big(\dfrac{3}{ 4}\Big)\approx0.03768$ ，公式（13）给出的上限大概是0.29. 然而， 我们假设$\mu=1$（并保持其他参数不变）， 那么$max(\dfrac{ mu t_0}{w_0},\dfrac{\mu}{\lambda })=\dfrac{3}{8}$, $\varphi\Big(\dfrac{3}{8}\Big)\approx0.3558 $，公式（13）得到大约是0.00001135，确实有很大的变化。</p>
+<p>通过上述讨论，我们观察到很重要的一点就是，为了系统的安全，必须确保$\lambda&gt;\mu$（否则，公式（13）的估算就没有什么用）；比如，系统中诚实交易的输入相对于攻击者的计算能力要足够的大。这也意味着在 IOTA 的早期，需要额外 的安全措施（比如检查点的方式）。</p>
+<p>同时，对于如何决定两个相互冲突的交易中哪一笔是合理的交易的策略来说， 仅依靠累积权重判断的我们必须十分小心谨慎。这是因为可能受制于在4.1 节中所描述的类似的攻击（攻击者也许会提前准备好双重交易，构建一个Subchain/Subtangle 来指向验证这笔双重支付交易，然后在商家接受交易之后将这个Subtangle广播出去）。然而，在下一节中我们将提出一个更好的方法来处理两笔相互冲突的交易：运行 tip 选择演算法，然后看这两笔交易中哪一笔交易（间接）被选取的 tip 所验证。</p>
+<h2><span id="41-寄生链攻击">4.1 寄生链攻击</span></h2><p>考虑图6 中的如下攻击：攻击者秘密打造一个Subtangle，并偶尔指向验证主网路，从而获得更多的积分（注意好的tips 的积分大概是主网路中所有自身权重之和，而攻击者的tips 还包含寄生链中所有的自身权重）。同时，对于单独打造这个链的攻击者来说，他有足够强大的电脑，网路延迟不是问题，因此攻击者能够获得到寄生 tips 具有更高高度的寄生链。最后，只要诚实节点所使用的选择策略是在已有的 tips 中进行一些简单选择的话，攻击者的 tips 数量在攻击的时候可以任意增加。</p>
+<p>为防御这种攻击，我们基于主 tangle 中具有更多活跃的杂凑算力的事实，因此相对于攻击者来说，可以使得更多的交易获得更多的累积权重。演算法的核心思想是使用 MCMC（马可夫链蒙地卡罗）演算法来选择两个 tips。<br>假设某一笔交易目前的累积权重为$H_x$ (如一笔在Tangle 上的交易)，再次提醒，我们假设所以交易的自身权重等于1；因此tip 的累积权重总是1，而其他交易的累积权重至少是2。</p>
+<p>这样做是为了在 Tangle 的节点上布下一些点(随机漫步者 (random walker))，让他们朝着 tips 随机行走。而被随机漫步者挑中的 tips 就是待被验证的候选交易。</p>
+<p>具体演 算法描述如下：</p>
+<ol>
+<li>考虑累积权重在 $W$ 和（假定） $2W$ 之间的所有交易（其中 $W$ 是很大的一个数，数值待定）；</li>
+<li>独立选择放置 $N$ 个随机漫步者（$N$ 不是很大，比如说为 10）；</li>
+<li>那些随机漫步者将进行离散时间随机行走到 tips（比如，当且仅当 $y$ 能够验证 $x$，就可以从 $x$ 转到 $y$）；</li>
+<li>两步行走能到达开始设定的tip 的话，这就意味着这是我们要进行验证的两个tips(然而，更好的做法是依照着个原则修改规定: 舍弃那些「太快」走到tips 的随机漫步者: 他们可能走到「懒惰的tips」)；</li>
+<li>随机行走转移机率按如下方式进行定义：如果$y$ 验证$x$（我们记做$y\to x$ ）， 那么转移概率$P_{xy}$ 是正比于$\exp\big( -\alpha(H_x-H_y)\big)$，也就是</li>
+</ol>
+<p>(14) $P_{xy}=\exp\big(-\alpha(H_x-H_y)\big)\Big(\sum_{z:z\to x}^{}\exp(-\alpha(H_x- H_z))\Big)^{-1}$</p>
+<p>其中 $\alpha&gt;0$ 是一个待选取的参数（可以从 $\alpha=1$ 开始）。需要注意的是这个演算法是局域性 (local) 的，我们不需要遍历到创始交易来计算所有的东西。<br>为了说明这个演算法如我们所想像的那样工作，首先考虑那些「懒惰的 tips」（那些故意认证一些较早的交易以避免进行交易的验证），如图 6 所示。注意到，即使某个交易被这样的一个 tip 所验证，也不太可能使得懒惰的 tip 被选中，因为从公式（14）可见累积权重差异非常大。</p>
+<p>接下来，考虑如下的攻击：攻击者秘密地构建一条链（「寄生链」），其中包含一笔交易用来从他的一个帐户清空转移到他控制的另一个帐户中（如图6 中左边的红色圆圈）。在某一个时刻，攻击者在主 tangle 中发起另一笔交易（如图 6 中另一个红色圆圈），并等待直到商家接受它。寄生链偶尔验证指向主 tangle（因此得名），从而使得寄生链具有很好的高度和积分（甚至比主 tangle 还要好），尽管其累积权重并不是特别大。同时注意到寄生链在商家的交易之后不能够再验证指向主 tangle 了。而且，攻击者也可以试图在他攻击的时候人为地任意增加他的 tips，如图 6 所示。攻击者的想法和目标是要使得其他交易来验证和指向寄生链，从而使得「好的」tangle 被孤立。<br><img src="https://i.imgur.com/Y7118tP.png" alt=""><br>图 6 tip 选择演算法。两个红色圆圈所代表的是试图进行双重攻击的交易。</p>
+<p>现在可以很容易地看到为什么 MCMC 选择演算法具有很高的机率不去选择攻击者的 tips 中的任何一个。这个演算法也同样不会去选择那些「懒惰」的 tips，其原因基本上是一样的：寄生链上的交易相比于那些他们指向的主 tangle 上的交易的累积权重要小得多。因此，随机行走不太可能会跳到寄生链（除非从寄生链开始，但是这也不太可能，因为主 tangle 包含更多的交易）。</p>
+<p>==这里提供一个附带的保护措施，我们可以先用较大的$\alpha$值跑出一个「理想的tip」(几乎是决定性的)，再用较小的$\alpha$ 执行真正的tip的选择。然后比对我们验证的交易是否跟「理想的 tip」一样==</p>
+<p>==我们也可以发现，直接使用递回，便可以简单快速地计算出口的机率分布;这是我们不希望节点做的事。然而或许可以用以下的手法，改变我们的方法:每一步的随机漫步中，有 $\dfrac{1}{3}$ 的机率会往回走(远离 tips 一步)。这种漫步最后会快速地到达 tips (因为它会漂移的前往 tips)，但是难以计算这种替代措施的效能(?)==</p>
+<p>接着让我们说明为什么节点要遵循这个演算法(至少很相像)。回顾我们在第 1 节所观察到的，假设至少一定「好的」比例的节点会遵循参考的演算法是非常合理的。而且因为计算力及网路延迟，tip 选择演算法会倾向针对过去 tangle 的状态计算(在发起交易的当下状态)。现在，故意采用更久以前的状态可能是个好主意，如我们一直以来的解释。想像一个「自私的」节点只想增加他的交易被验证的机会。这节提到的 MCMC 演算法定义了一个机率分布的 tips 集合，更明确的说，对于节点而言，第一首选的 tip 会是机率最大的。然而，若其他节点也很「自私」而且用相同方法的话，那他们全部都会失败：许多新交易会在同一时间验证相同的两个tips，因此在接下来的验证过程会有太多竞争(因为节点都用过去的状态，他们不会察觉在大量的验证下，这两个tips 的累积权重的增加)。因此，即使是自私的节点也会采用随机的 tip 验证演算法，而被选到的 tips 的机率与原本的机率分布应该相差不远。我们并没有宣称这个机率分布的总和会等于原本的机率和，但上述的讨论我们可以发现，两者应该很接近。这表示选择「坏」tip 的机率应维持低机率。在任何情况，并没有太多的诱因让自私的节点存在，因为只有微量减少其验证时间。节点也并没有理由放弃 MCMC tip 选择演算法。</p>
+<p>同样，转移机率也不一定如（14）那样所定义的一成不变。除了指数函数外，我们还可以选择其他衰减更快的函数，比如 $f(s)=s^{-3}$。可以自由的选择 $W$ 与 $N$。事实上，作者觉得这一节最主要的贡献就是提出 MCMC 当作 tip 选择演算法；还未有更明确的「理论」论点告诉我们该如何设定这些参数。</p>
+<h2><span id="42-分裂攻击">4.2 分裂攻击</span></h2><p>针对 MCMC 演算法的如下攻击策略由 Aviv Zohar 提出。在高负载区，攻击者可以试图将 tangle 分裂成两个分支，并在这两个分支中均保持自己的余额，从而两个分支继续增长。为避免这种情况，诚实的节点会同时指向两个分支（有效地合并两个分支），攻击者则必须在分裂开始的时候放入至少两个相互冲突的交易。然后，他/她就希望大概网路中各一半的交易贡献给两个分支，从而可以「补偿」 无规涨落，即使他所拥有的只有相对较小的计算能力。这样，攻击者就可以在两 个分支中都可以使用这笔资金。</p>
+<p>为了抵抗这种攻击，我们需要使用一些「高门槛」的规则（类似于比特币中选择最长的链）来使得同时维持两个分支上的余额是十分困难的。比如，假定一个分支具有总的权重（或者是其他我们可以使用的计量方式）为537，而另一个分支的总权重与此十分接近，比如说为 528。如果在这种情况下，一个诚实的节点选择第一分支的概率就非常接近于 1/2，这样很可能攻击者也可以在两个分支中都保持帐户余额。然而，如果诚实节点偏向于第一分支的概率比1/2 要大很多的话，那么攻击者就很难维持两个分支的余额，因为经过不可避免的无规涨落， 网路会迅速选择其中的一个分支，而抛弃掉另一个分支。很显然，为了使得MCMC 演算法具有这样的行为，我们需要选择一个迅速衰减函数f，并且在一个相对较大深度的节点开始进行无规行走（这样就可以极大可能性地在网路分裂之前启动无规行走）。这种情况下，无规行走就会有很大概率选择「较重」的分支，即使两 个分支的权重差很小。</p>
+<p>当然，也可以考虑其他改进的 tip 选择演算法。比如说，如果一个节点看到两个大的 Subtangles，那么就选择其中自身权重之和较大的一个分支，然后进行上述的 MCMC 演算法。<br>而且，如下思路也许值得考虑： 设想在（14）中的转移概率不仅仅与$H_x-H_y$ 相关，而且还依赖于$H_x$ ，这样接下来的马可夫链在无规行走的时候进入较深的tangle 中（避免进入较弱的分支）就近乎是确定性的，而当接近于tips 的时候，无规行走就更分散一些（因此也就有足够的随机性来选择两笔交易进行验证） 。</p>
+<h3><span id="结论">结论：</span></h3><ol>
+<li>在攻击者试图超越网路进行双重交易时，我们考虑了几种攻击策略。</li>
+<li>「大权重」攻击意味着，为了进行双重，攻击者试图发起一笔大权重双重交易，从而超过合法的 Subtangle。这种攻击在交易的自身权重不设上限的情况下，对于网路的确是一个威胁。因此，为了解决这个问题，我们可以限制交易的自身权重上限，或者将自身权重设为常数。</li>
+<li>当交易自身权重最大值为$m$的时候，攻击者最好的策略是发起和生成的每笔交易都具有最大权重值，并且指向验证双重交易。如果交易输入流中的诚实交易相比攻击者的计算能力要足够大的时候，那么双重交易具有更多的累积权重的概率可以通过公式（14）来进行估计（同时也可以参考（14）下面的例子）。</li>
+<li>构建「寄生链」的攻击可以使得基于高度和积分的验证策略无效，因为攻击 者可以得到比合法 tangle 更高的积分。与此相反，4.1 节中描述的玛律科夫蒙特卡洛 tip 选择演算法可以抵抗这种攻击。</li>
+<li>此外，上述方法还可以抵抗「懒惰节点」，也就是那些仅仅验证很早之前的交易，而避免进行必要的计算来验证 tangle。</li>
+</ol>
+<h2><span id="5-抵抗量子计算">5 抵抗量子计算</span></h2><p>众所周知（今天仍然只是假设），足够大的量子电脑在解决那些只能通过猜测结果并重复进行检验的问题时具有极高的效率。为生成一个比特币区块而寻找 nonce 就是这类问题中的一个很好的例子。在目前，平均来说必须查找 $2^{68}$ 个 nonces 从而找到一个合适的杂凑值来生成区块。众所周知（例如文献<a href="#15-gilles-brassard-peter-hyer-alain-tapp-1998-quantum-cryptanalysis-of-hash-and-claw-free-functions-lecture-notes-in-computer -science-1380-163-169">[15]</a>）量子电脑在解决上述类似的问题时的复杂度为$\Theta(\sqrt N)$，而对于经典的电脑其复杂度则是$\Theta(N)$ 。因此量子电脑在比特币挖矿方面相比常规的矿机具有 $\sqrt2^{68}=2^{34}\approx 170$亿倍的效率。同时，请注意，如果区块链在面对杂凑运算能力增加的时候不能够同时增加挖矿难度的话，那么这就将导致大量孤块的增加。</p>
+<p>基于相同的原因，我们可以看到上述所描述的「大权重」攻击在量子电脑上同样具有更高的效率。然而，前面所讲的权重上限设置（如第 4 节所建议的） 因为如下的理由，可以有效地抵抗量子电脑的攻击。在 IOTA 系统中，为发送交易而需要寻找合适的杂凑时，其寻找的 nonces 空间并不是很大，大概是 $3^8$ 左右。因此对于一个「理想」的量子电脑来说，其效率的提高也就在$3^4=81$ 倍这个数量级，这相对来说是可以接受的（记住$\Theta(\sqrt N)$ 也许意味着大概是$10\sqrt N$）。而且，在 IOTA 的演算法中，发送交易的时候，寻找 nonce 所需要的时间不比其他任务所需要的时间多很多，而后面提到的那部分任务相对来说是更容易抵抗量子电脑的。</p>
+<p>因此，上述讨论表明 Tangle 相对于（比特币）区块链来说提供了更好的抵抗量子电脑的技术。</p>
+<h2><span id="参考文献">参考文献</span></h2><h5><span id="1-iota-a-cryptocurrency-for-internet-of-things-see-httpwwwiotatokencom-and-httpsbitcointalkorgindexphptopic12164790"><em>[1]</em> Iota: a cryptocurrency for Internet-of-Things. See , and </span></h5><h5><span id="2-bitcoinj-working-with-micropayment-channels-httpsbitcoinjgithubioworking-with-micropayments"><em>[2]</em> bitcoinj. Working with micropayment channels. </span></h5><h5><span id="3-people-on-nxtforumorg-2014-dag-a-generalized-blockchain-ltbrgthttpsnxtforumorgproof-of-stake-algorithmdag-a-generalized-blockchain-ltbrgtregistration-at-nxtforumorg-required"><em>[3]</em> people on nxtforum.org (2014) DAG, a generalized blockchain. &lt;/br&gt; blockchain/ &lt;/br&gt;(registration at nxtforum.org required)</span></h5><h5><span id="4-moshe-babaioff-shahar-dobzinski-sigal-oren-aviv-zohar-2012-on-bitcoin-and-red-balloons-proc-13th-acm-conf-electronic-commerce-56-73"><em>[4]</em> Moshe Babaioff, Shahar Dobzinski, Sigal Oren, Aviv Zohar (2012) On Bitcoin and red balloons. Proc. 13th ACM Conf. Electronic Commerce, 56-73.</span></h5><h5><span id="5-richard-durrett-2004-probability-theory-and-examples-duxbury-advanced-series"><em>[5]</em> Richard Durrett (2004) Probability - Theory and Examples. Duxbury advanced series.</span></h5><h5><span id="6-sergio-demian-lerner-2015-dagcoin-a-cryptocurrency-without-blocksltbrgthttpsbitslogwordpresscom20150911dagcoin"><em>[6]</em> Sergio Demian Lerner (2015) DagCoin: a cryptocurrency without blocks.&lt;/br&gt;</span></h5><h5><span id="7-yonatan-sompolinsky-aviv-zohar-2013-accelerating-bitcoins-transaction-processing-fast-money-grows-on-trees-not-chainsltbrgthttpseprintiacrorg2013881-pdf"><em>[7]</em> Yonatan Sompolinsky, Aviv Zohar (2013) Accelerating Bitcoin’s Transaction Processing. Fast Money Grows on Trees, Not Chains.&lt;/br&gt;. pdf</span></h5><blockquote id="fn_eighth">
+<sup>eighth</sup>. Yonatan Sompolinsky, Yoad Lewenberg, Aviv Zohar (2016) SPECTRE: Serialization of Proof-of-work Events: Confirming Transactions via Recursive<a href="#reffn_eighth" title="Jump back to footnote [eighth] in the text."> &#8617;</a>
+</blockquote>
+<p>Elections. <a target="_blank" rel="noopener" href="https://eprint.iacr.org/2016/1159.pdf">https://eprint.iacr.org/2016/1159.pdf</a></p>
+<h5><span id="9-yoad-lewenberg-yonatan-sompolinsky-aviv-zohar-2015-inclusive-block-chain-protocolsltbrgt-httpwwwcshujiacil~avivzpubs15-inclusive_btcpdf"><em>[9]</em> Yoad Lewenberg, Yonatan Sompolinsky, Aviv Zohar (2015) Inclusive Block Chain Protocols.&lt;/br&gt;  /inclusive_btc.pdf</span></h5><h5><span id="10-joseph-poon-thaddeus-dryja-2016-the-bitcoin-lightning-network-scalable-off-chain-instant-paymentsltbrgthttpslightningnetworklightning-network-paperpdf"><em>[10]</em> Joseph Poon, Thaddeus Dryja (2016) The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments.&lt;/br&gt;</span></h5><h5><span id="11-sheldon-m-ross-2012-introduction-to-probability-models-10th-ed"><em>[11]</em> Sheldon M. Ross (2012) Introduction to Probability Models. 10th ed.</span></h5><h5><span id="12-david-vorick-2015-getting-rid-of-blocks-slidescomdavidvorickbraids"><em>[12]</em> David Vorick (2015) Getting rid of blocks. slides.com/davidvorick/braids</span></h5><h5><span id="13-amir-dembo-ofer-zeitouni-2010-large-deviations-techniques-and-applications-springer"><em>[13]</em> Amir Dembo, Ofer Zeitouni (2010) Large Deviations Techniques and Applications. Springer.</span></h5><h5><span id="14-sheldon-m-ross-2009-a-first-course-in-probability-8th-ed"><em>[14]</em> Sheldon M. Ross (2009) A First Course in Probability. 8th ed.</span></h5><h5><span id="15-gilles-brassard-peter-hyer-alain-tapp-1998-quantum-cryptanalysis-of-hash-and-claw-free-functions-lecture-notes-in-computer-science-1380-163-169"><em>[15]</em> Gilles Brassard, Peter Hyer, Alain Tapp (1998) Quantum cryptanalysis of hash and claw-free functions. Lecture Notes in Computer Science 1380, 163-169.</span></h5>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Tangle 白皮书</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">1. 关于系统的一般介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">2. 权重及相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">3. 系统的稳定性和截断集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">结论：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">3.1 累积权重的增长有多快？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.1.</span> <span class="toc-text">结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">4. 可能的攻击情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">4.1 寄生链攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.8.</span> <span class="toc-text">4.2 分裂攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.8.1.</span> <span class="toc-text">结论：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.9.</span> <span class="toc-text">5 抵抗量子计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.10.</span> <span class="toc-text">参考文献</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.1.</span> <span class="toc-text">[1] Iota: a cryptocurrency for Internet-of-Things. See , and </span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.2.</span> <span class="toc-text">[2] bitcoinj. Working with micropayment channels. </span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.3.</span> <span class="toc-text">[3] people on nxtforum.org (2014) DAG, a generalized blockchain. &lt;&#x2F;br&gt; blockchain&#x2F; &lt;&#x2F;br&gt;(registration at nxtforum.org required)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.4.</span> <span class="toc-text">[4] Moshe Babaioff, Shahar Dobzinski, Sigal Oren, Aviv Zohar (2012) On Bitcoin and red balloons. Proc. 13th ACM Conf. Electronic Commerce, 56-73.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.5.</span> <span class="toc-text">[5] Richard Durrett (2004) Probability - Theory and Examples. Duxbury advanced series.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.6.</span> <span class="toc-text">[6] Sergio Demian Lerner (2015) DagCoin: a cryptocurrency without blocks.&lt;&#x2F;br&gt;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.7.</span> <span class="toc-text">[7] Yonatan Sompolinsky, Aviv Zohar (2013) Accelerating Bitcoin’s Transaction Processing. Fast Money Grows on Trees, Not Chains.&lt;&#x2F;br&gt;. pdf</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.8.</span> <span class="toc-text">[9] Yoad Lewenberg, Yonatan Sompolinsky, Aviv Zohar (2015) Inclusive Block Chain Protocols.&lt;&#x2F;br&gt;  &#x2F;inclusive_btc.pdf</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.9.</span> <span class="toc-text">[10] Joseph Poon, Thaddeus Dryja (2016) The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments.&lt;&#x2F;br&gt;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.10.</span> <span class="toc-text">[11] Sheldon M. Ross (2012) Introduction to Probability Models. 10th ed.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.11.</span> <span class="toc-text">[12] David Vorick (2015) Getting rid of blocks. slides.com&#x2F;davidvorick&#x2F;braids</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.12.</span> <span class="toc-text">[13] Amir Dembo, Ofer Zeitouni (2010) Large Deviations Techniques and Applications. Springer.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.13.</span> <span class="toc-text">[14] Sheldon M. Ross (2009) A First Course in Probability. 8th ed.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">1.10.0.0.14.</span> <span class="toc-text">[15] Gilles Brassard, Peter Hyer, Alain Tapp (1998) Quantum cryptanalysis of hash and claw-free functions. Lecture Notes in Computer Science 1380, 163-169.</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&text=Tangle 白皮书"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&is_video=false&description=Tangle 白皮书"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tangle 白皮书&body=Check out this article: https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&title=Tangle 白皮书"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2020/12/20/2020-12-17-Tangle-%E7%99%BD%E7%9A%AE%E4%B9%A6/&name=Tangle 白皮书&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 LuoZui
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+
+
+

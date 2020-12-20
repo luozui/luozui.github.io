@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="内容较多，建议使用目录  容斥原理集合的并集设$A_1,A_2…,A_n$是有限集合，则$|A_1\bigcup A_2\bigcup … \bigcup A_n|&#x3D;\sum_{i&#x3D;1}^n |A_i|-\sum_{i&#x3D;1}^n \sum_{j&gt;i}|A_i\bigcap A_j|-\sum_{i&#x3D;1}^n \sum_{j&gt;i} \sum_{k&gt;j}|A_i\bigcap A_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="与程序竞赛有关的数学知识点">
+<meta property="og:url" content="https://www.lzphi.cn/2017/02/02/mathcode-2/index.html">
+<meta property="og:site_name" content="LuoZui&#96; Blog">
+<meta property="og:description" content="内容较多，建议使用目录  容斥原理集合的并集设$A_1,A_2…,A_n$是有限集合，则$|A_1\bigcup A_2\bigcup … \bigcup A_n|&#x3D;\sum_{i&#x3D;1}^n |A_i|-\sum_{i&#x3D;1}^n \sum_{j&gt;i}|A_i\bigcap A_j|-\sum_{i&#x3D;1}^n \sum_{j&gt;i} \sum_{k&gt;j}|A_i\bigcap A_">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-02-02T04:12:41.000Z">
+<meta property="article:modified_time" content="2020-12-02T16:24:16.621Z">
+<meta property="article:author" content="LuoZui">
+<meta property="article:tag" content="ACM数论公式">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>与程序竞赛有关的数学知识点</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/09/12/mac/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2017/02/02/mathcode-2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&text=与程序竞赛有关的数学知识点"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&is_video=false&description=与程序竞赛有关的数学知识点"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=与程序竞赛有关的数学知识点&body=Check out this article: https://www.lzphi.cn/2017/02/02/mathcode-2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&name=与程序竞赛有关的数学知识点&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">容斥原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">集合的并集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Sylvester公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">[列题] 区间(S,E]中与n互质的元素个数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数φ(n)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">证明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">性质：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">欧拉函数φ(n) c++实现代码：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">[列1]区间[1,n]与n的最大公约数的和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">[列2]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">[列3]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">莫比乌斯函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">同余</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">费马小定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">模逆元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">证明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">[例] 已知 a, m, 求b</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">o(n)得出[1,n]的(mod p)逆元</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">孙子定理（中国剩余定理）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">通解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">矩阵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">矩阵乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">矩阵快速幂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">线性递推关系与矩阵乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">利用矩阵乘法计算递推数列的某一项代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.5.</span> <span class="toc-text">《挑战》上的矩阵快速幂模板</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.1.</span> <span class="toc-text">约数个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.2.</span> <span class="toc-text">a的k次幂前n位数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.3.</span> <span class="toc-text">定积分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">线性筛法筛素数、莫比乌斯函数、欧拉函数</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        与程序竞赛有关的数学知识点
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">LuoZui` Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2017-02-02T04:12:41.000Z" itemprop="datePublished">2017-02-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/ACM%E6%95%B0%E8%AE%BA%E5%85%AC%E5%BC%8F/" rel="tag">ACM数论公式</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>内容较多，建议使用目录</p>
+</blockquote>
+<h2><span id="容斥原理">容斥原理</span></h2><h3><span id="集合的并集">集合的并集</span></h3><p>设$A_1,A_2…,A_n$是有限集合，则<br>$|A_1\bigcup A_2\bigcup … \bigcup A_n|=\sum_{i=1}^n |A_i|-\sum_{i=1}^n \sum_{j&gt;i}|A_i\bigcap A_j|-\sum_{i=1}^n \sum_{j&gt;i} \sum_{k&gt;j}|A_i\bigcap A_j\bigcap A_k|…+(-1)^n|A_1\bigcap A_2\bigcap…\bigcap A_n|$</p>
+<h3><span id="sylvester公式">Sylvester公式</span></h3><p>给定集合N和具有性质i的集合$A_1,A_2…,A_n$，则<br>$|\overline A_1\bigcap \overline A_2\bigcap … \bigcap \overline A_n|=|N|-(\sum_{i=1}^n |A_i|-\sum_{i=1}^n \sum_{j&gt;i}|A_i\bigcap A_j|…+(-1)^n|A_1\bigcap A_2\bigcap…\bigcap A_n|)$</p>
+<h3><span id="列题-区间se中与n互质的元素个数">[列题] 区间(S,E]中与n互质的元素个数</span></h3><p>设$A_i$为n的第i个质因子$p_i$的倍数的集合且$A_i⊆(S,E],i=1,2,3…k$，那么$|A_i|=[\frac {E}{p_i}]-[\frac {S}{p_i}],|A_i\bigcap A_j|=[\frac {E}{p_ip_j}]-[\frac {S}{p_ip_j}]…$，然后套用上面公式即可解决问题了。关键是将这个公式表达出来，有没有发现一共有$2^n$项多项式，而且组合数量为奇数时负，组合数量为偶数时符号为正。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">POIAE</span><span class="params">(<span class="keyword">int</span> n,<span class="keyword">int</span> S,<span class="keyword">int</span> E)</span></span>&#123;</span><br><span class="line">    <span class="comment">//质因子分解</span></span><br><span class="line">    <span class="keyword">int</span> p[<span class="number">32</span>],u=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i*i&lt;=n;i++)</span><br><span class="line">        <span class="keyword">if</span>(n%i==<span class="number">0</span>)&#123;</span><br><span class="line">            p[u++]=i;</span><br><span class="line">            <span class="keyword">while</span>(n%i==<span class="number">0</span>) n/=i;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">1</span>) p[u++]=n;</span><br><span class="line">    </span><br><span class="line">    LL qua=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">1</span>&lt;&lt;u;i++)&#123;</span><br><span class="line">        <span class="keyword">int</span> cnt=<span class="number">0</span>,com=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;u;k++)</span><br><span class="line">            <span class="keyword">if</span>(i&gt;&gt;k&amp;<span class="number">1</span>) cnt++,com*=p[k];</span><br><span class="line">        qua+=cnt&amp;<span class="number">1</span>?E/com-S/com:-E/com+S/com;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> E-S-qua;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2><span id="欧拉函数φn">欧拉函数φ(n)</span></h2><p>欧拉函数φ(n) 是小于等于n且与n互素的正整数的个数，假设$n=p_1^{α_1}p_2^{α_2}p_3^{α_3}…p_k^{α_k}$，则有</p>
+<script type="math/tex; mode=display">φ(n)=n(1-\frac{1}{p_1})(1-\frac{1}{p_2})(1-\frac{1}{p_3})…(1-\frac{1}{p_k})</script><h3><span id="证明">证明：</span></h3><p>设$A_i$为1到n之间$p_i$的倍数的集合，i=1,2,3,…,k，则<br>φ(n)=$|\overline A_1\bigcap \overline A_2\bigcap … \bigcap \overline A_k|$<br>=$|N|-(\sum_{i=1}^k |A_i|-\sum_{i=1}^k \sum_{j&gt;i}|A_i\bigcap A_j|…+(-1)^k|A_1\bigcap A_2\bigcap…\bigcap A_k|)$<br>=$n-(\sum_{i=1}^k \frac{n}{p_i}-\sum_{i=1}^k \sum_{j&gt;i}\frac{n}{p_i p_j}+\sum_{i=1}^k \sum_{j&gt;i} \sum_{h&gt;j}\frac{n}{p_i p_j p_h}…+(-1)^k\frac{n}{p_1 p_2 p_3…p_k})$<br>=$n(1-\frac{1}{p_1})(1-\frac{1}{p_2})(1-\frac{1}{p_3})…(1-\frac{1}{p_k})$</p>
+<h3><span id="性质">性质：</span></h3><ul>
+<li>欧拉函数是积性函数，即是说若m,n互质$φ(mn)=φ(m)φ(n)$ 。</li>
+<li>若n是质数p的k次幂，$φ(n)=φ(p^k)=p^k-p^{k-1}=(p-1)p^{k-1}$，因为除了p的倍数外，其他数都跟n互质。</li>
+</ul>
+<h3><span id="欧拉函数φn-c实现代码">欧拉函数φ(n) c++实现代码：</span></h3><p>我们为了方便根据以上性质将其变形得到</p>
+<script type="math/tex; mode=display">φ(n)=(p_1-1)p_1^{α_1-1}(p_1-1)p_2^{α_2-1}...(p_k-1)p_k^{α_k-1}</script><p>如此便可写出φ(n)的$o(\sqrt n )$ 的代码了。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">Eular</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    LL ans=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i*i&lt;=n;i++)</span><br><span class="line">        <span class="keyword">if</span>(n%i==<span class="number">0</span>)&#123;</span><br><span class="line">            ans*=i<span class="number">-1</span>;</span><br><span class="line">            n/=i;</span><br><span class="line">            <span class="keyword">while</span>(n%i==<span class="number">0</span>) n/=i,ans*=i;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">1</span>) ans*=n<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>欧拉函数值表筛法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> e[MAX_N];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Euler</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;MAX_N;i++) e[i]=i;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;MAX_N;i++)</span><br><span class="line">        <span class="keyword">if</span>(e[i]==i)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> k=i;k&lt;MAX_N;k+=i) e[k]=e[k]/i*(i<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="列1区间1n与n的最大公约数的和">[列1]区间[1,n]与n的最大公约数的和</span></h3><script type="math/tex; mode=display">\sum_{i=1}^n gcd(i,n)=\sum_{d|n}d\cdot φ(n/d)</script><h3><span id="列2">[列2]</span></h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/ctsas/article/details/55510666">UVA11426</a> 求  $\sum_{i=1}^n \sum_{j=i+1}^n gcd(i,j)$</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> phi[MAX_N];LL res[MAX_N];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span>&#123;<span class="comment">//筛法的魅力</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;MAX_N;i++) phi[i]=i;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;MAX_N;i++)</span><br><span class="line">        <span class="keyword">if</span>(phi[i]==i)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=i;j&lt;MAX_N;j+=i)</span><br><span class="line">                phi[j]=phi[j]/i*(i<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;MAX_N;i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=i;k&lt;MAX_N;k+=i)</span><br><span class="line">            res[k]+=<span class="number">1L</span>L*i*phi[k/i];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;MAX_N;i++)</span><br><span class="line">        res[i]+=res[i<span class="number">-1</span>]-i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="列3">[列3]</span></h3><p>[1,n]与n互素的和</p>
+<script type="math/tex; mode=display">\sum_{gcd(i,n)=1}^{i<n}i=n\cdot φ(n)/2</script><hr>
+<h2><span id="莫比乌斯函数">莫比乌斯函数</span></h2><p>莫比乌斯函数$μ(n)$，在狄利克雷卷积的乘法中与恒等函数互为逆元，$μ(1)=1$，对于无平方因子数$n=\prod_{i=1}^{t}p_i$有$\mu(n)=(-1)^t$，对于有平方因子数$n$有$μ(n)=0$。</p>
+<p>$o(\sqrt n)$ 的板子<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mu</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i * i &lt;= n; ++i) &#123;</span><br><span class="line">		<span class="keyword">if</span>(n%i == <span class="number">0</span>) &#123;</span><br><span class="line">			n /= i;++cnt;</span><br><span class="line">			<span class="keyword">if</span>(n%i == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(n &gt; <span class="number">1</span>) ++cnt;</span><br><span class="line">	<span class="keyword">return</span> cnt&amp;<span class="number">1</span>?<span class="number">-1</span>:<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2><span id="同余">同余</span></h2><p>两个整数 a，b，若它们除以正整数 m所得的余数相等，则称 a，b对于模 m同余，记作$ a\equiv b{\pmod {m}}$</p>
+<p>其性质这里不赘述了，可以参看 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%90%8C%E9%A4%98">维基</a></p>
+<hr>
+<h2><span id="费马小定理">费马小定理</span></h2><p>费马小定理是数论中的一个定理：假如a是一个整数，p是一个质数，那么 $a^{p}-a$ 是p的倍数，可以表示为</p>
+<script type="math/tex; mode=display">a^{p}\equiv a{\pmod p}</script><p>如果a不是p的倍数，这个定理也可以写成</p>
+<script type="math/tex; mode=display">a^{p-1}\equiv 1{\pmod p}</script><p>[列题]计算 $2^{100}$ 除以13的余数</p>
+<p>$ 2^{100}\equiv 2^{12\times 8+4}{\pmod  {13}} \equiv (2^{12})^{8}\cdot 2^{4}{\pmod  {13}}\equiv 1^{8}\cdot 16{\pmod  {13}}  \equiv 16{\pmod  {13}}\equiv 3{\pmod  {13}}$</p>
+<p>则答案为3</p>
+<hr>
+<h2><span id="欧拉定理">欧拉定理</span></h2><p>若$gcd(a,n)=1$,则<script type="math/tex">a^{φ(n)} ≡ 1(mod \ n)</script></p>
+<hr>
+<h2><span id="扩展欧几里得算法">扩展欧几里得算法</span></h2><p>给予二整数a、b，必存在有整数x、y使得ax + by = gcd(a,b)<br>对于这个问题，扩展欧几里得算法能够快速解出使上式成立(x,y)，复杂度o(log(n))<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">exGcd</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> &amp;x,<span class="keyword">int</span> &amp;y)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (b==<span class="number">0</span>)&#123;</span><br><span class="line">        x=<span class="number">1</span>,y=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> q=exGcd(b,a%b,y,x);</span><br><span class="line">    y-=a/b*x;</span><br><span class="line">    <span class="keyword">return</span> q;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>通过上面代码可以得到一组特解，记为$(x_0,y_0)$，那么通解可以表示为</p>
+<script type="math/tex; mode=display">\begin{cases}
+x = x_0 - {b}\cdot k \\\
+y = y_0 +{a}\cdot k \\\
+k∈\Bbb Z \\\
+\end{cases}</script><p>例题 <a target="_blank" rel="noopener" href="http://blog.csdn.net/ctsas/article/details/55006969">POJ1061</a></p>
+<hr>
+<h2><span id="模逆元">模逆元</span></h2><p>若$a\cdot b ≡ 1(mod  m)$，称a和b对于模数m来说互为逆元</p>
+<p> 定理：a存在模m的乘法逆元的充要条件是gcd(a,m) = 1</p>
+<h3><span id="证明">证明：</span></h3><ol>
+<li>充分性：由欧拉定理知$a^{φ(m)} ≡ 1(mod  m)$，那么必有$b=a^{φ(m)-1}$ 使$a\cdot b ≡ 1(mod  m)$</li>
+<li>必要性：既然$a\cdot b ≡ 1(mod  m)$，即有$a\cdot b-m\cdot k=1=k’\cdot gcd(a,m),k∈\Bbb Z,k’∈\Bbb Z$成立，即有$gcd(a,m)=1$</li>
+</ol>
+<h3><span id="例-已知-a-m-求b">[例] 已知 a, m, 求b</span></h3><p>将定义式改写成</p>
+<p>$a\cdot b-1=m\cdot k,k∈\Bbb Z \\ ⇒ a\cdot b-m\cdot k=1,k∈\Bbb Z \\ $<br>利用扩展欧几里得算法不难求得一组解$(b’,k’)$ 使得</p>
+<p>$a\cdot b’+m\cdot k’=gcd(a,m) $</p>
+<p>结合定理得<br>若$gcd(a,m)≠ 1$，那么b无解<br>若$gcd(a,m)= 1$，那么$b=\frac{b’}{gcd(a,m)}=b’$</p>
+<h3><span id="代码">代码</span></h3><p>那么也能写出代码了，若无答案返回-1，若有返回最小的正解</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mod_inverse</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> m)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> x,y;</span><br><span class="line">	<span class="keyword">if</span>(exGcd(a,m,x,y)==<span class="number">1</span>) <span class="keyword">return</span> (m+x%m)%m;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="on得出1n的mod-p逆元">o(n)得出[1,n]的(mod p)逆元</span></h3><p>该算法要求所mod p为素数且n&lt; p，记 $a$ 的逆元表示为 $a^{-1} $<br>设$k=p\%i$，假设以求得$k^{-1} \pmod p$，则</p>
+<p>$i\cdot i^{-1}≡ k\cdot k^{-1}≡1\pmod p $<br>$⇒i\cdot i^{-1} ≡ (p\%i) \cdot (p\%i)^{-1} \pmod p $<br>$⇒i\cdot i^{-1} ≡ (p - [p/i]\cdot i) \cdot (p\%i)^{-1} \pmod p $<br>$⇒i\cdot i^{-1} ≡ ((i-1)\cdot p +p - [p/i]\cdot i) \cdot (p\%i)^{-1} \pmod p $<br>$⇒i\cdot i^{-1} ≡ i\cdot (p - [p/i]) \cdot (p\%i)^{-1} \pmod p $<br>由于p为素数，则$gcd(i,p)=1$，则<br>$i^{-1}  ≡ (p - [p/i])\cdot (p\%i)^{-1} \pmod p$</p>
+<p>取[0,p)中的解<br>$i^{-1}  = (p - [p/i])\cdot (p\%i)^{-1} \% p$</p>
+<p>代码为</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> inv[MAXN];</span><br><span class="line">inv[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i&lt;MAXN; i++)</span><br><span class="line">    inv[i] = inv[MOD%i]*(MOD-MOD/i)%MOD;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2><span id="孙子定理中国剩余定理">孙子定理（中国剩余定理）</span></h2><p>用现代数学的语言来说明的话，中国剩余定理给出了以下的一元线性同余方程组：</p>
+<script type="math/tex; mode=display">(S) :  
+    \begin{cases} 
+    x \equiv a_1 \pmod {m_1} \\\ 
+    x \equiv a_2 \pmod {m_2} \\\
+    \vdots  \\\
+    x \equiv a_n \pmod {m_n}
+    \end{cases}</script><p>有解的判定条件，并用构造法给出了在有解情况下解的具体形式。</p>
+<p>中国剩余定理说明：假设整数$m_1,m_2,…,m_n$其中任两数互质，则对任意的整数：$a_1,…,a_n$，方程组$(S)$有解，并且通解可以用如下方式构造得到：</p>
+<ol>
+<li>设 ${ M=m_1 \times m_2\times \cdots \times m_n = \prod _{i=1}^nm_i}$ 是整数$m_1,m_2,…,m_n$的乘积，并设$ { M_{i}=M/m_{i},\;\;\forall i\in \{1,2,\cdots ,n\}} $，即$ { M_{i}} $是除了$m_i$以外的n − 1个整数的乘积。</li>
+<li>设${ t_{i}=M_{i}^{-1}}$模$ m_{i}$的逆元： $t_i M_i \equiv 1 \pmod {m_i},  \; \; \forall i \in \{1, 2, \cdots , n\}$。</li>
+<li>方程组$ (S)$的通解形式为：$x = a_1 t_1 M_1 + a_2 t_2 M_2 + \cdots + a_n t_n M_n + k M= k M + \sum_{i=1}^n a_i t_i M_i, \quad k \in \mathbb{Z}. $在模 $M$的意义下，方程组 $(S)$只有一个解：<script type="math/tex; mode=display">x = \sum_{i=1}^n a_i t_i M_i.</script></li>
+</ol>
+<h3><span id="证明">证明</span></h3><p>对于 ${ \forall j\in \{1,2,\cdots ,n\},\;j\neq i,\;\;\operatorname {gcd} (m_{i},m_{j})=1}$</p>
+<p>考察乘积$ a_i t_i M_i $可知：</p>
+<p>$ a_i t_i M_i \equiv a_i \cdot 1 \equiv a_i \pmod {m_i}, $<br>$\forall j \in \{1, 2, \cdots , n\}, \; j\neq i, \; \; a_i t_i M_i \equiv 0 \pmod {m_j}. $</p>
+<p>所以 $x = a_1 t_1 M_1 + a_2 t_2 M_2 + \cdots + a_n t_n M_n$ 满足：</p>
+<p>$\forall i \in \{1, 2, \cdots , n\}, \; \; x = a_i t_i M_i + \sum_{j \neq i} a_j t_j M_j \equiv a_i + \sum_{j \neq i} 0 \equiv a_i \pmod {m_i}. $</p>
+<p>到此以得证$(S)$的一个解$ x = \sum_{i=1}^n a_i t_i M_i.$</p>
+<h3><span id="通解">通解</span></h3><p>假设 $x_1$和$x_2$都是方程组 $(S)$的解，那么：</p>
+<p>$  \forall i \in \{1, 2, \cdots , n\}, \; \;  x_1 - x_2 \equiv 0 \pmod {m_i} .$，即 $\forall m_i|x_1-x_2$ </p>
+<p>即 $\prod_{i=1}^n m_i|x_1-x_2$，即 $M|x_1-x_2$</p>
+<p>到此说明方程组 $(S)$ 的任何两个解之间必然相差$M$的整数倍，则通解可表示为</p>
+<script type="math/tex; mode=display">\{k M + \sum_{i=1}^n a_i t_i M_i  \; ; \quad k \in \mathbb{Z} \}.</script><h3><span id="代码">代码</span></h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">CRT</span><span class="params">(<span class="keyword">int</span> *m,<span class="keyword">int</span> *a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    LL M=<span class="number">1</span>,ans=<span class="number">0</span>,x,t_i;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++) M*=m[i];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">        LL M_i=M/m[i];</span><br><span class="line">        exGcd(m[i],M_i,x,t_i);     <span class="comment">//求 M_i 模 m[i] 的逆元 t_i</span></span><br><span class="line">        ans=(ans+a[i]*t_i*M_i)%M;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2><span id="矩阵">矩阵</span></h2><p>数学上，一个m×n的矩阵是一个由m行n列元素排列成的矩形阵列。矩阵里的元素可以是数字、符号或数学式。</p>
+<p>大小相同（行数列数都相同）的矩阵之间可以相互加减，具体是对每个位置上的元素做加减法。矩阵的乘法则较为复杂。两个矩阵可以相乘，当且仅当第一个矩阵的列数等于第二个矩阵的行数。矩阵的乘法满足结合律和分配律，但不满足交换律。</p>
+<h3><span id="矩阵乘法">矩阵乘法</span></h3><p>矩阵相乘最重要的方法是一般矩阵乘积。它只有在第一个矩阵的列数（column）和第二个矩阵的行数（row）相同时才有定义。一般单指矩阵乘积时，指的便是一般矩阵乘积。若A为 ${ m\times n} $矩阵，B为$ { n\times p} $矩阵，则他们的乘积AB(有时记做A · B）会是一个 ${ m\times p} $ 矩阵。其乘积矩阵的元素如下面式子得出：</p>
+<script type="math/tex; mode=display">AB_{ij}=S_{r=1}^n a_{ir} b_{rj} = a_{i1} b_{1j} + a_{i2} b_{2j} + \cdots + a_{in}b_{nj}</script><h3><span id="矩阵快速幂">矩阵快速幂</span></h3><p>类比快速幂不难的到矩阵快速幂，若有矩阵a，则求 $a^n$ 代码如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> N;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">matrix</span>&#123;</span>LL m[MAX_N][MAX_N];&#125;;</span><br><span class="line"><span class="function">matrix <span class="title">multi</span><span class="params">(matrix a,matrix b)</span></span>&#123;</span><br><span class="line">	matrix tmp;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=N;j++)&#123;</span><br><span class="line">			tmp.m[i][j]=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;=N;k++)</span><br><span class="line">				tmp.m[i][j]+=a.m[i][k]*b.m[k][j];</span><br><span class="line">			tmp.m[i][j]%=MOD;</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">matrix <span class="title">fast_mod</span><span class="params">(matrix a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">	matrix res;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=N;j++)</span><br><span class="line">			res.m[i][j]=(i==j);</span><br><span class="line">	<span class="keyword">while</span>(n)&#123;</span><br><span class="line">		<span class="keyword">if</span>(n&amp;<span class="number">1</span>) res=multi(res,a);</span><br><span class="line">		a=multi(a,a);</span><br><span class="line">		n&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3><span id="线性递推关系与矩阵乘法">线性递推关系与矩阵乘法</span></h3><p>设数列 $\{h_n\}$ 满足 $k$ 阶常系数线性递推关系： </p>
+<script type="math/tex; mode=display">h_n = C_1h_{n−1} + C_2h_{n−2} + C_3h_{n−3} +···+ C_kh_{n−k}+b_n</script><p>$b_n$ 可以为常数，也可以是关于n的函数</p>
+<h3><span id="利用矩阵乘法计算递推数列的某一项代码">利用矩阵乘法计算递推数列的某一项代码</span></h3><p>使用上面的两个知识点就不难敲出代码了<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_N 10</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MOD 1000000007</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line"><span class="keyword">int</span> N;LL b_n=<span class="number">0</span>,C[MAX_N],h[MAX_N];</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">matrix</span>&#123;</span>LL m[MAX_N][MAX_N];&#125;;</span><br><span class="line"><span class="function">matrix <span class="title">multi</span><span class="params">(matrix a,matrix b)</span></span>&#123;</span><br><span class="line">	matrix tmp;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=N;j++)&#123;</span><br><span class="line">			tmp.m[i][j]=<span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;=N;k++)</span><br><span class="line">				tmp.m[i][j]+=a.m[i][k]*b.m[k][j];</span><br><span class="line">			tmp.m[i][j]%=MOD;</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">return</span> tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">matrix <span class="title">fast_mod</span><span class="params">(matrix a,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">	matrix res;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=N;j++)</span><br><span class="line">			res.m[i][j]=(i==j);</span><br><span class="line">	<span class="keyword">while</span>(n)&#123;</span><br><span class="line">		<span class="keyword">if</span>(n&amp;<span class="number">1</span>) res=multi(res,a);</span><br><span class="line">		a=multi(a,a);</span><br><span class="line">		n&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">(matrix &amp;res,matrix &amp;H)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++) res.m[<span class="number">1</span>][i]=C[i];</span><br><span class="line">	res.m[<span class="number">1</span>][N]=b_n;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>;i&lt;=N;i++)</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=N;j++)</span><br><span class="line">			res.m[i][j]=(i==j+<span class="number">1</span>);</span><br><span class="line">	res.m[N][N<span class="number">-1</span>]=<span class="number">0</span>;res.m[N][N]=<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">		H.m[i][<span class="number">1</span>]=h[N-i];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">2</span>;j&lt;=N;j++) H.m[i][j]=<span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	H.m[N][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">slove</span><span class="params">(<span class="keyword">int</span> k,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">	matrix res,H;</span><br><span class="line">	init(res,H);</span><br><span class="line">	</span><br><span class="line">	res=fast_mod(res,n-k+<span class="number">1</span>);</span><br><span class="line">	res=multi(res,H);</span><br><span class="line">	LL ans=res.m[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,ans);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> k,n;</span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>,&amp;n,&amp;k)!=EOF)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=k;i++) <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,&amp;C[i]);</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=k;i++) <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,&amp;h[i]);</span><br><span class="line">		N=k+<span class="number">1</span>;</span><br><span class="line">		slove(k,n);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>例题 <a target="_blank" rel="noopener" href="http://blog.csdn.net/ctsas/article/details/62990004">51NOD 1126</a></p>
+<h3><span id="挑战上的矩阵快速幂模板">《挑战》上的矩阵快速幂模板</span></h3><p>以斐波那契数列第n项为例<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">vector</span>&lt;LL&gt; vec;</span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">vector</span>&lt;vec&gt; mat;</span><br><span class="line"><span class="keyword">const</span> LL MOD = <span class="number">1000000009</span>;</span><br><span class="line"></span><br><span class="line"><span class="function">mat <span class="title">mul</span><span class="params">(mat &amp;A,mat &amp;B)</span></span>&#123;</span><br><span class="line">	<span class="function">mat <span class="title">C</span><span class="params">(A.size(),vec(B[<span class="number">0</span>].size()))</span></span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.size();++i)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;B.size();++k)&#123;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;B[<span class="number">0</span>].size();++j)</span><br><span class="line">				C[i][j]=(C[i][j]+A[i][k]*B[k][j])%MOD;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> C;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">mat <span class="title">pow</span><span class="params">(mat A,LL n)</span></span>&#123;</span><br><span class="line">	<span class="function">mat <span class="title">B</span><span class="params">(A.size(),vec(A.size()))</span></span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;A.size();++i) B[i][i]=<span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span>(n)&#123;</span><br><span class="line">		<span class="keyword">if</span>(n&amp;<span class="number">1</span>) B=mul(B,A);</span><br><span class="line">		A=mul(A,A);</span><br><span class="line">		n&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> B;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">mat <span class="title">A</span><span class="params">(<span class="number">2</span>,vec(<span class="number">2</span>))</span></span>;</span><br><span class="line">	A[<span class="number">0</span>][<span class="number">0</span>]=A[<span class="number">0</span>][<span class="number">1</span>]=A[<span class="number">1</span>][<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">	A[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">0</span>;</span><br><span class="line">	LL n;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>,&amp;n);</span><br><span class="line">	A=<span class="built_in">pow</span>(A,n);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>,A[<span class="number">1</span>][<span class="number">0</span>]);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2><span id="其他">其他</span></h2><h3><span id="约数个数">约数个数</span></h3><p>仍何一个整数n都可以表示成$n=p_1^{a_1}p_2^{a_2}…p_k^{a_k}$，那么,n的约数个数</p>
+<script type="math/tex; mode=display">\sum_{d|n} 1=(a_1+1)(a_2+1)...(a_k+1)</script><p>例题 <a target="_blank" rel="noopener" href="http://blog.csdn.net/ctsas/article/details/55221847">LOJ1341</a></p>
+<h3><span id="a的k次幂前n位数">a的k次幂前n位数</span></h3><p>用该方法要注意精度</p>
+<p>$a^k=10^{\lg{a^k}}=10^{k\cdot \lg a}=10^{[k\cdot \lg a]+\{k\cdot \lg a\}}$</p>
+<p>前n位：<code>[10^&#123;n-1&#125;\cdot 10^&#123;\&#123;k\cdot \lg a\&#125;&#125;</code></p>
+<p>例题 <a target="_blank" rel="noopener" href="http://blog.csdn.net/ctsas/article/details/55259279">LOJ1282</a></p>
+<h3><span id="定积分">定积分</span></h3><p>Simpson`s 3/8 rule<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps=<span class="number">1e-8</span>;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">f</span><span class="params">(<span class="keyword">double</span> x)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x*x;<span class="comment">//被积函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">getAppr</span><span class="params">(<span class="keyword">double</span> a,<span class="keyword">double</span> b)</span></span>&#123;<span class="comment">//Simpson`s 3/8 rule</span></span><br><span class="line">	<span class="keyword">return</span> (b-a)*(f(a)+<span class="number">3</span>*f((<span class="number">2</span>*a+b)/<span class="number">3</span>)+<span class="number">3</span>*f((a+<span class="number">2</span>*b)/<span class="number">3</span>)+f(b))/<span class="number">8.0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">simpson</span><span class="params">(<span class="keyword">double</span> l,<span class="keyword">double</span> r)</span></span>&#123;<span class="comment">//积分区间[l,r]</span></span><br><span class="line">	<span class="keyword">double</span> sum=getAppr(l,r);</span><br><span class="line">	<span class="keyword">double</span> mid=(l+r)/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">double</span> suml=getAppr(l,mid);</span><br><span class="line">	<span class="keyword">double</span> sumr=getAppr(mid,r);</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">fabs</span>(sum-suml-sumr)&lt;eps?sum:simpson(l,mid)+simpson(mid,r);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>例题 <a target="_blank" rel="noopener" href="http://blog.csdn.net/ctsas/article/details/70991214">地狱飞龙</a></p>
+<hr>
+<h2><span id="线性筛法筛素数-莫比乌斯函数-欧拉函数">线性筛法筛素数、莫比乌斯函数、欧拉函数</span></h2><p>线性筛法（欧拉筛法）可以在 O(n) 的时间内获得 [1,n] 的所有素数。算法保证每个合数都会被它的最小质因子筛掉，所以复杂度是线性的。同时，我们可以利用这一特性，结合积性函数的性质，在 O(n)的时间内筛出一些积性函数的值。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> isNotPrime[MAXN + <span class="number">1</span>];</span><br><span class="line"><span class="keyword">int</span> mu[MAXN + <span class="number">1</span>], phi[MAXN + <span class="number">1</span>], primes[MAXN + <span class="number">1</span>], cnt;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">euler</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    isNotPrime[<span class="number">0</span>] = isNotPrime[<span class="number">1</span>] = <span class="literal">true</span>;</span><br><span class="line">    mu[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    phi[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= MAXN; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!isNotPrime[i]) &#123;</span><br><span class="line">            primes[++cnt] = i;</span><br><span class="line">            mu[i] = <span class="number">-1</span>;</span><br><span class="line">            phi[i] = i - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= cnt; j++) &#123;</span><br><span class="line">            <span class="keyword">int</span> t = i * primes[j];</span><br><span class="line">            <span class="keyword">if</span> (t &gt; MAXN) <span class="keyword">break</span>;</span><br><span class="line">            isNotPrime[t] = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % primes[j] == <span class="number">0</span>) &#123;</span><br><span class="line">                mu[t] = <span class="number">0</span>;</span><br><span class="line">                phi[t] = phi[i] * primes[j];</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                mu[t] = -mu[i];</span><br><span class="line">                phi[t] = phi[i] * (primes[j] - <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<blockquote>
+<p>本文章不定期更新</p>
+<p>如有谬误，恳请指正</p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">容斥原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">集合的并集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Sylvester公式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">[列题] 区间(S,E]中与n互质的元素个数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">欧拉函数φ(n)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">证明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">性质：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">欧拉函数φ(n) c++实现代码：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">[列1]区间[1,n]与n的最大公约数的和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">[列2]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">[列3]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">莫比乌斯函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">同余</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">费马小定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">欧拉定理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">扩展欧几里得算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">模逆元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">证明：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">[例] 已知 a, m, 求b</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">o(n)得出[1,n]的(mod p)逆元</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">孙子定理（中国剩余定理）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">证明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">通解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">矩阵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">矩阵乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">矩阵快速幂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">线性递推关系与矩阵乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">利用矩阵乘法计算递推数列的某一项代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.5.</span> <span class="toc-text">《挑战》上的矩阵快速幂模板</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.1.</span> <span class="toc-text">约数个数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.2.</span> <span class="toc-text">a的k次幂前n位数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.3.</span> <span class="toc-text">定积分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">线性筛法筛素数、莫比乌斯函数、欧拉函数</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2017/02/02/mathcode-2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&text=与程序竞赛有关的数学知识点"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&is_video=false&description=与程序竞赛有关的数学知识点"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=与程序竞赛有关的数学知识点&body=Check out this article: https://www.lzphi.cn/2017/02/02/mathcode-2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&title=与程序竞赛有关的数学知识点"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2017/02/02/mathcode-2/&name=与程序竞赛有关的数学知识点&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 LuoZui
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+
+
+

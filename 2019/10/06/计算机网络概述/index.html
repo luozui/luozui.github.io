@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="【考查目标】  掌握计算机网络的基本概念、基本原理和基本方法。 掌握计算机网络的体系结构和典型网络协议，了解典型网络的组成和特点，理解典型网络设备的工作原理。 能够运用计算机网络的基本概念、基本原理和基本方法进行网络系统的分析、设计和应用。  计算机网络体系结构计算机网络概述计算机网络的概念、组成与功能 概念：  计算机网络 (简称为网络)由若干 结点(node) 和连接这些结点的链路(ink)组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络体系结构">
+<meta property="og:url" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="LuoZui&#96; Blog">
+<meta property="og:description" content="【考查目标】  掌握计算机网络的基本概念、基本原理和基本方法。 掌握计算机网络的体系结构和典型网络协议，了解典型网络的组成和特点，理解典型网络设备的工作原理。 能够运用计算机网络的基本概念、基本原理和基本方法进行网络系统的分析、设计和应用。  计算机网络体系结构计算机网络概述计算机网络的概念、组成与功能 概念：  计算机网络 (简称为网络)由若干 结点(node) 和连接这些结点的链路(ink)组">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/1-1.png">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/1-3.png">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/1-6">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/分层结构.png">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/1-18.png">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/1-19.png">
+<meta property="og:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/接口协议服务.png">
+<meta property="article:published_time" content="2019-10-06T08:35:00.000Z">
+<meta property="article:modified_time" content="2020-12-02T16:24:16.678Z">
+<meta property="article:author" content="LuoZui">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述/1-1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>计算机网络体系结构</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/10/06/%E7%89%A9%E7%90%86%E5%B1%82/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/09/03/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%B2%BE%E8%A6%81/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&text=计算机网络体系结构"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&is_video=false&description=计算机网络体系结构"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计算机网络体系结构&body=Check out this article: https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&name=计算机网络体系结构&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">计算机网络体系结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">计算机网络概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.1.</span> <span class="toc-text">计算机网络的概念、组成与功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.2.</span> <span class="toc-text">计算机网络的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.3.</span> <span class="toc-text">计算机网络的标准化工作及相关组织</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">计算机网络体系结构与参考模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">计算机网络分层结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.2.</span> <span class="toc-text">计算机网络协议、接口、服务等概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.3.</span> <span class="toc-text">ISO&#x2F;0SI参考模型和TCP&#x2F;IP模型</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        计算机网络体系结构
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">LuoZui` Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-10-06T08:35:00.000Z" itemprop="datePublished">2019-10-06</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>【考查目标】</p>
+<ul>
+<li>掌握计算机网络的基本概念、基本原理和基本方法。</li>
+<li>掌握计算机网络的体系结构和典型网络协议，了解典型网络的组成和特点，理解典型网络设备的工作原理。</li>
+<li>能够运用计算机网络的基本概念、基本原理和基本方法进行网络系统的分析、设计和应用。</li>
+</ul>
+<h1><span id="计算机网络体系结构">计算机网络体系结构</span></h1><h2><span id="计算机网络概述">计算机网络概述</span></h2><h3><span id="计算机网络的概念-组成与功能">计算机网络的概念、组成与功能</span></h3><ul>
+<li><p>概念：</p>
+<ol>
+<li><p><strong>计算机网络</strong> (简称为<strong>网络</strong>)由若干 <strong>结点(node)</strong> 和连接这些结点的<strong>链路(ink)</strong>组成。</p>
+</li>
+<li><p>网络之间还可以通过路由器互连起来，这就构成了一个覆盖范围更大的计算机网络。这样的网络称为<strong>互连网</strong>(internetwork或internet)， 如图1-1(b)所示。因此互连网是<strong>“网络的网络”(network of networks)</strong>。</p>
+<p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\1-1.png" alt="1568031577119" style="zoom:80%;"></p>
+</li>
+<li><p><strong>网络把许多计算机连接在一-起，而互连网则把许多网络通过路由器连接在一.起。与网络相连的计算机常称为主机。</strong></p>
+</li>
+<li><p>以小写字母 <strong>i</strong> 开始的 <strong>internet (互连网)是一个通用名词，它泛指由多个计算机网络互连而成的计算机网络</strong>。在这些网络之间的通信协议( 即通信规则)可以任意选择，不一定非要使用TCP/IP协议。<br>以大写字母 <strong>I</strong> 开始的 <strong>Internet (互联网，或因特网)则是一个专用名词，它指当前全球最大的、开放的、由众多网络相互连接而成的特定互连网，它采用TCP/IP协议族作为通信的规则，且其前身是美国的ARPANET。</strong></p>
+</li>
+<li><p><strong>ISP（Internet Server Provider）：互联网服务提供商</strong></p>
+</li>
+<li><p><strong>IXP（Internet eXchange Point）：互联网交换点</strong></p>
+<p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\1-3.png" alt="1568031934509"></p>
+</li>
+<li><p>互联网已经成为世界上规模最大和增长速率最快的计算机网络；由欧洲原子核研究组织CERN开发的<strong>万维网WWW (World Wide Web)</strong>被广泛使用在互联网上。</p>
+</li>
+</ol>
+</li>
+<li><p>互联网的组成：</p>
+<ol>
+<li><p><strong>边缘部分</strong>：由所有连接在互联网上的<strong>主机</strong>组成。这部分是<strong>用户直接使用的</strong>，用来进行通信(传送数据、音频或视频)和资源共享。</p>
+<ul>
+<li><p>边缘通信可分为：</p>
+<p>(1). 客户-服务器方式（client-sercer，<strong>CS方式</strong>），客户是服务请求方，服务器是服务提供方。</p>
+<p>(2). 对等方式（peer-to-peer，<strong>P2P方式</strong>），是指两台主机在通信时并不区分服务请求方、服务提供方。</p>
+<p><em>客户和服务器本来都指的是计算机进程(软件)。</em></p>
+</li>
+</ul>
+</li>
+<li><p><strong>核心部分</strong>：由大量网络和连接这些网络的<strong>路由器</strong>组成。这部分是<strong>为边缘部分提供服务的</strong>(提供连通性和交换)。</p>
+<ul>
+<li><strong>路由器（router）</strong>：它是一种专用计算机(但不叫做主机)。路由器是实现<strong>分组交换</strong>(packet switching)的关键构件，其任务是<strong>转发收到的分组</strong>，这是网络核心部分最重要的功能。</li>
+<li>电路交换：（电话机），建立连接-&gt;通话-&gt;释放连接，必须建立一条专用的物理通路。独占一条通路，效率低。</li>
+<li>分组交换：分组交换则采用<strong>存储转发</strong>技术。</li>
+</ul>
+<p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\1-6" alt="1568032207092" style="zoom:67%;"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h3><span id="计算机网络的分类">计算机网络的分类</span></h3><ul>
+<li><p><strong>按照网络的作用范围进行分类</strong></p>
+<ol>
+<li><p><strong>广域网 WAN</strong> (Wide Area Network)<br>广域网的作用范围通常为几十到几千公里，因而有时也称为<strong>远程网</strong>(long haul network)。广域网是互联网的核心部分，其任务是通过长距离(例如，跨越不同的国家)运送主机所发送的数据。连接广域网各结点交换机的链路一般都是高速链路，具有较大的通信容量。本书不专门讨论广域网。</p>
+</li>
+<li><p><strong>城域网 MAN</strong> (Metropolitan Area Network)<br>城域网的作用范围一般是一个城市，可跨越几个街区甚至整个城市，其作用距离约为5 ~ 50 km。城域网可以为一一个或几个单位所拥有，但也可以是一种公用设施，用来将多个局域网进行互连。目前很多城域网采用的是以太网技术，因此有时也常并入局域网的范围进行讨论。</p>
+</li>
+<li><p><strong>局域网 LAN</strong> (Local Area Network)<br>局域网- -般用微型计算机或工作站通过高速通信线路相连(速率通常在10 Mbit/s 以上)，但地理上则局限在较小的范围(如1 km左右)。在局域网发展的初期，一个学校或工厂往往只拥有一个局域网，但现在局域网已非常广泛地使用，学校或企业大都拥有许多个互连的局域网(这样的网络常称为校园网或企业网)。</p>
+</li>
+<li><p><strong>个人区域网 PAN</strong> (Personal Area Network)<br>个人区域网就是在个人工作的地方把属于个人使用的电子设备(如便携式电脑等)用无线技术连接起来的网络，因此也常称为无线个人区域网WPAN (Wireless PAN),其范围很小，大约在10 m左右。</p>
+<p>顺便指出，若中央处理机之间的距离非常近(如仅1米的数量级或甚至更小些)，则一般就称之为多处理机系统而不称它为计算机网络。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>按照网络的使用者进行分类</strong></p>
+<ol>
+<li><strong>公用网 (public network)</strong><br>这是指电信公司(国有或私有)出资建造的大型网络。公用”的意思就是所有愿意按电信公司的规定交纳费用的人都可以使用这种网络。因此公用网也可称为公众网。</li>
+<li><strong>专用网 (private network)</strong><br>这是某个部门为满足本单位的特殊业务工作的需要而建造的网络。这种网络不向本单位以外的人提供服务。例如，军队、铁路、银行、电力等系统均有本系统的专用网。<br>公用网和专用网都可以提供多种服务。如传送的是计算机数据，则分别是公用计算机网络和专用计算机网络。</li>
+</ol>
+</li>
+<li><p>用来把用户接入到互联网的网络：这种网络就是接入网AN (Access Network)， 它又称为本地接入网或居民接入网。</p>
+</li>
+</ul>
+<h3><span id="计算机网络的标准化工作及相关组织">计算机网络的标准化工作及相关组织</span></h3><ul>
+<li><strong>RFC</strong> (Request For Comments)：<strong>所有的互联网标准都是以RFC的形式在互联网上发表的</strong>。RFC的意思就是“请求评论”。所有的RFC文档都可从互联网上免费下载[W-RFC]。但应注意，只有很少部分的RFC文档最后能变成互联网标准。<ol>
+<li><strong>互联网草案</strong> (Internet Draft)一互联网 草案的有效期只有六个月。在这个阶段还不能算是RFC文档。</li>
+<li><strong>建议标准</strong> (Proposed Standard)一从<strong>这个阶段开始就成为RFC文档</strong>。</li>
+<li><strong>互联网标准</strong> (Internet Standard)一 达到正式标准后，每个标准就分配到一个编号STD XX。一个标准可以和多个RFC文档关联。截止到2016年7月，互联网标准的最大编号是STD 83。可见要成为互联网标准还是很不容易的。</li>
+</ol>
+</li>
+<li>1992年由于互联网不再归美国政府管辖，因此成立了一个国际性组织叫做<strong>互联网协会</strong>(Internet Society,简称为ISOC) [W-ISOC]，以便对互联网进行全面管理以及在世界范围内促进其发展和使用。ISOC下面有一个技术组织叫做<strong>互联网体系结构委员会 IAB</strong>(Internet Architecture Board)”，负责管理互联网有关协议的开发。IAB下面又设有两个工程部:<ol>
+<li><strong>互联网工程部 IETF</strong> (Internet Engineering Task Force)<br>IETF是由许多工作组WG (Working Group)组成的论坛(forum)，具体工作由互联<strong>网工程指导小组 IESG</strong> (Internet Engineering Steering Group)管理。 这些工作组划分为若千个领域(area)，每个领域集中研究某-特定的短期和中期的工程问题，主要是针对协议的开发和标准化。</li>
+<li><strong>互联网研究部 IRTF</strong> (Internet Research Task Force)<br>IRTF是由一一些研究组RG (Research Group)组 成的论坛，具体工作由<strong>互联网研究指导小组 IRSG</strong> (Internet Research Steering Group)管 理。IRTF 的任务是研究一些需要长期考虑的问题，包括互联网的一些协议、应用、体系结构等。</li>
+</ol>
+</li>
+</ul>
+<h2><span id="计算机网络体系结构与参考模型">计算机网络体系结构与参考模型</span></h2><p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\分层结构.png" alt="1568811249370"></p>
+<h3><span id="计算机网络分层结构">计算机网络分层结构</span></h3><ul>
+<li><strong>分层带来的好处</strong>：<ol>
+<li>各层之间是独立的</li>
+<li>灵活性好</li>
+<li>结构上可分割</li>
+<li>易于实现和维护</li>
+<li>能促进标准化工作</li>
+</ol>
+</li>
+<li><strong>计算机网络的各层及其协议的集合</strong>就是<strong>网络的体系结构</strong>(architecture)。换种说法，<strong>计算机网络的体系结构就是这个计算机网络及其构件所应完成的功能的精确定义</strong>[GREE82]。<strong>体系结构是抽象的，而实现则是具体的，是真正在运行的计算机硬件和软件。</strong></li>
+</ul>
+<p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\1-18.png" alt="1568034997412" style="zoom:80%;"></p>
+<p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\1-19.png" alt="1568034964085" style="zoom:80%;"></p>
+<p>TCP/IP的层次结构以及各层数据封装的过程：<a target="_blank" rel="noopener" href="https://blog.51cto.com/12906292/2060836；https://www.cnblogs.com/embedded-linux/p/6937786.html">https://blog.51cto.com/12906292/2060836；https://www.cnblogs.com/embedded-linux/p/6937786.html</a></p>
+<h3><span id="计算机网络协议-接口-服务等概念">计算机网络协议、接口、服务等概念</span></h3><p><img src="/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/计算机网络概述\接口协议服务.png" alt="1568811501435"></p>
+<ul>
+<li><p><strong>网络协议</strong>：<strong>对等实体</strong>进行通信的规则的集合。协议是“<strong>水平</strong>”的，服务是“垂直”的。</p>
+</li>
+<li><p><strong>接口</strong>：在同一系统中相邻两层的实体进行交互（即交换信息）地方，通常称为<strong>服务访问点 SAP</strong> (Service Access Point)。 服务访问点SAP是一个抽象的概念，它实际上就是一个<strong>逻辑接口</strong>，有点像邮政信箱(可以把邮件放入信箱和从信箱中取走邮件)，但这种层间接口和两个设备之间的硬件接口(并行的或串行的)并不一样。</p>
+<p>OSI把层与层之间交换的数据的单位称为<strong>服务数据单元 SDU</strong> (Service Data Unit)， 它可以与PDU不一样。例如，可以是多个SDU合成为一个PDU， 也可以是一个SDU划分为几个PDU ; <em>在传输系统的每一层都将建立协议数据单元（PDU）。PDU包含来自上层的信息和当前层的实体附加的信息，这个PDU会被传送到下一较低的层</em></p>
+</li>
+<li><p><strong>服务</strong>：下层为上层提供的功能调用，是“<strong>垂直</strong>”的。上层通过<strong>服务原语</strong>（命令）调用下层的功能，原语分为：</p>
+<ol>
+<li>请求（Request）</li>
+<li>指示（Indication）</li>
+<li>响应（Request）</li>
+<li>证实（Conformation）</li>
+</ol>
+<p>下层的协议对上层的服务用户是透明的。计算机</p>
+</li>
+</ul>
+<h3><span id="iso0si参考模型和tcpip模型">ISO/0SI参考模型和TCP/IP模型</span></h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>OSI模型</th>
+<th>说明</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>物理层</td>
+<td>定义数据终瑞畏备（DTE）和数据通信设备（DCE）的物理和泄矿 连接方法.</td>
+<td>在物理媒体上透明地传输原始比特流</td>
+</tr>
+<tr>
+<td>数据琏路层</td>
+<td>提供相邻结点之间的通信，检测并校正物理层传输介质上产生的传输差错，使链路对网络层显现为一条无差错、可靠的数据传输线路・</td>
+<td>成帧、差错控制、流量控制、传输管理和控制对共享信道的访问</td>
+</tr>
+<tr>
+<td>网络层</td>
+<td>把网络层的协议数据单元（分组）从源端传到目的端，为分组交换网上的不同主机提供通信服务.</td>
+<td>流量控制、拥嘉控制、差错控制和网际互联導</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>提供可靠的瑞到端（或进程到进程）的数抿传输服务.</td>
+<td>端到端的传输管理、差储控制、流量控制和复用分用</td>
+</tr>
+<tr>
+<td>会话层</td>
+<td>向表示层实体或用户进程提供建立连接并在连接上有序地传输数 据，这就是会话.</td>
+<td>建立、皆理进程何的会话</td>
+</tr>
+<tr>
+<td>表示层</td>
+<td>处理在两个通信系统中交换信息的表示方式.</td>
+<td>数据压缩、加密和解密</td>
+</tr>
+<tr>
+<td>应用层</td>
+<td>为特定类里的网络应用提供访问<strong>OSI</strong>环境的手段.</td>
+<td>用户与网络的界面</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><strong>OSI为七层协议，TCP/IP为四层</strong></li>
+<li>OSI模型的网络层同时支持无连接和面向连接的通信，但是传输层上只支持面向连接的通信；TCP/IP模型的网络层只提供无连接的服务，但在传输层上同时支持两种通信模式。</li>
+<li>OSI的七层协议结构既复杂且冗余又不实用，但其概念清楚，体系结构理论较完整。</li>
+<li>TCP/IP则相对比较简单，更具实用性，TCP/IP的协议现在得到了广泛的应用，但它原先并没有一个明确的体系结构。</li>
+<li>OSI/RM是国际标准，但是并没有进行大规模的应用，而TCP/IP协议最终占领了几乎整个网络世界。</li>
+<li>OSI端到端：上四层，点到点：下三层</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>TCP/IP</strong>模型</th>
+<th>对应<strong>OSI</strong>模型</th>
+<th>典型协议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网络接口层</td>
+<td>物理层、数据链路层</td>
+<td>各种通信接口（以太网等）</td>
+</tr>
+<tr>
+<td>网际层（仅支持<strong>无连接</strong>）</td>
+<td>网络层（支持无连接和面向连接）</td>
+<td><strong>IP、ARP、RARP、ICMP</strong></td>
+</tr>
+<tr>
+<td>传输层（支持无连接和面向连接）</td>
+<td>传输层（仅支持面向连接）</td>
+<td><strong>TCP</strong>、<strong>UDP</strong></td>
+</tr>
+<tr>
+<td>应用层</td>
+<td>会话层、表示层、应用层</td>
+<td><strong>FTP</strong>、<strong>DNS</strong>、<strong>SMTP</strong>、<strong>HTTP</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>OSI和TCP/IP<strong>相同点</strong>:<ol>
+<li>都采取分层的体系结构，将庞大且复杂的问题划分为若干个较容易处理的、范围较小的问题，且分层的功能也大体相似。</li>
+<li>都是基于独立的协议栈的概念。</li>
+<li>都可以解决异构网络的互联，实现世界上不同厂家生产的计算机之间的通信。</li>
+</ol>
+</li>
+<li><strong>不同点</strong>:<ol>
+<li>OSI精确定义了三个概念:服务、协议和接口，这与现代面向对象程序设计思想非常吻合。而TCP/IP在这三个概念上没有明确区分，不符合软件工程的思想。</li>
+<li>OSI产生在协议发明之前，不偏向于任何特定的协议，通用性好。TCP/IP 正好相反，不适合于其他非TCP/IP的协议栈。</li>
+<li>TCP/IP在设计之初就考虑到多种异构网的互连问题，并将网际IP作为一个单独重要层次。OSI最初只考虑到用一种标准的公用数据网将各种不同的系统互连。</li>
+<li>OSI在网络层支持无连接和面向连接，在传输层仅支持面向连接。而TCP/IP认为可靠性是端到端的问题，在网际层仅支持无连接，但在传输层支持无连接和面向连接。</li>
+</ol>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">计算机网络体系结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">计算机网络概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.1.</span> <span class="toc-text">计算机网络的概念、组成与功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.2.</span> <span class="toc-text">计算机网络的分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.3.</span> <span class="toc-text">计算机网络的标准化工作及相关组织</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">计算机网络体系结构与参考模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">计算机网络分层结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.2.</span> <span class="toc-text">计算机网络协议、接口、服务等概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.3.</span> <span class="toc-text">ISO&#x2F;0SI参考模型和TCP&#x2F;IP模型</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&text=计算机网络体系结构"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&is_video=false&description=计算机网络体系结构"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=计算机网络体系结构&body=Check out this article: https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&title=计算机网络体系结构"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2019/10/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/&name=计算机网络体系结构&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 LuoZui
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+
+
+
