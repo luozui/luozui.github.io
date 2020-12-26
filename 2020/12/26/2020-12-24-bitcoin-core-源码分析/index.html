@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Bitcoin 架构 Bitcoin Core 代码结构分析文件夹Bitcoin Core 代码仓库：https:&#x2F;&#x2F;github.com&#x2F;bitcoin&#x2F;bitcoin 12345678910111213141516171819202122232425$ tree -L 1 -d  # v0.21.0.├── bench			基于Microbenchmark（微基准测试）的代码测试模块├── c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bitcoin core 源码分析">
+<meta property="og:url" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="LuoZui&#96; Blog">
+<meta property="og:description" content="Bitcoin 架构 Bitcoin Core 代码结构分析文件夹Bitcoin Core 代码仓库：https:&#x2F;&#x2F;github.com&#x2F;bitcoin&#x2F;bitcoin 12345678910111213141516171819202122232425$ tree -L 1 -d  # v0.21.0.├── bench			基于Microbenchmark（微基准测试）的代码测试模块├── c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/mbc2_0301.png">
+<meta property="og:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Bitcoin-core-v0.10.0.png">
+<meta property="og:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/validation.png">
+<meta property="og:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ccoinsview.png">
+<meta property="og:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/cdbwrapper.png">
+<meta property="og:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/doxygen.png">
+<meta property="article:published_time" content="2020-12-26T08:01:35.191Z">
+<meta property="article:modified_time" content="2020-12-26T08:01:35.191Z">
+<meta property="article:author" content="LuoZui">
+<meta property="article:tag" content="blockchain">
+<meta property="article:tag" content="bitcoin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/mbc2_0301.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>bitcoin core 源码分析</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/12/23/2020-12-23-bitcoin-core-%E4%BD%BF%E7%94%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&text=bitcoin core 源码分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&is_video=false&description=bitcoin core 源码分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=bitcoin core 源码分析&body=Check out this article: https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&name=bitcoin core 源码分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Bitcoin 架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Bitcoin Core 代码结构分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">2.2.1 P2P网络管理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">2.2.2 非对称密钥管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">2.2.3 挖矿</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">2.2.4 线程管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">2.2.5 链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.7.</span> <span class="toc-text">2.2.6 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.8.</span> <span class="toc-text">2.2.7 数据类型与类型转化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.9.</span> <span class="toc-text">2.2.8 进程入口文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.10.</span> <span class="toc-text">2.2.9 交易与区块相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.11.</span> <span class="toc-text">2.2.10 系统与网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.12.</span> <span class="toc-text">2.2.11 重写与底层实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.13.</span> <span class="toc-text">2.2.12 接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.14.</span> <span class="toc-text">2.2.13 其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">User interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">User interfaces &gt; P2P</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">User interfaces &gt; RPC&#x2F;HTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">User interfaces &gt; Qt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.4.</span> <span class="toc-text">User interfaces &gt; ZMQ</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Concurrency model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Concurrency model &gt; threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Concurrency model &gt; ValidationInterface</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Regions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Regions summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Regions &gt; net.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Regions &gt; net_processing.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">Regions &gt; validation.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.5.</span> <span class="toc-text">Regions &gt; txmempool.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.6.</span> <span class="toc-text">Regions &gt; coins.&amp;#123;h,cpp&amp;#125; &amp; txdb.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.7.</span> <span class="toc-text">Regions &gt; dbwrapper.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.8.</span> <span class="toc-text">Regions &gt; script&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.9.</span> <span class="toc-text">Regions &gt; consensus&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.10.</span> <span class="toc-text">Regions &gt; policy&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.11.</span> <span class="toc-text">Regions &gt; interfaces&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.12.</span> <span class="toc-text">Regions &gt; wallet&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.13.</span> <span class="toc-text">Regions &gt; qt&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.14.</span> <span class="toc-text">Regions &gt; rpc&#x2F;</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">5.14.1.</span> <span class="toc-text">Example</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.15.</span> <span class="toc-text">Regions &gt; miner.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.16.</span> <span class="toc-text">Regions &gt; zmq&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">$ tree ~&#x2F;.bitcoin&#x2F;regtest&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Storage &gt; .dat files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Storage &gt; leveldb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.4.</span> <span class="toc-text">Storage &gt; berkeleydb</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">Data structures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">0.1.</span> <span class="toc-text">Data structures &gt; chainstate &gt; blocks</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.1.</span> <span class="toc-text">src&#x2F;primitives&#x2F;block.h:CBlockHeader</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.2.</span> <span class="toc-text">src&#x2F;primitives&#x2F;block.h:CBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.3.</span> <span class="toc-text">src&#x2F;primitives&#x2F;block.h:CBlockLocator</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.4.</span> <span class="toc-text">src&#x2F;chain.h:CBlockIndex</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">0.2.</span> <span class="toc-text">Data structures &gt; chainstate &gt; CChainState</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Exploring the codebase</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        bitcoin core 源码分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">LuoZui` Blog</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-12-26T08:01:35.191Z" itemprop="datePublished">2020-12-26</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/bitcoin/" rel="tag">bitcoin</a>, <a class="tag-link-link" href="/tags/blockchain/" rel="tag">blockchain</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2><span id="bitcoin-架构">Bitcoin 架构</span></h2><p><img src="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/mbc2_0301.png" alt="Bitcoin Core Architecture"></p>
+<h2><span id="bitcoin-core-代码结构分析">Bitcoin Core 代码结构分析</span></h2><h3><span id="文件夹">文件夹</span></h3><p>Bitcoin Core 代码仓库：<a target="_blank" rel="noopener" href="https://github.com/bitcoin/bitcoin">https://github.com/bitcoin/bitcoin</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$ tree -L 1 -d  # v0.21.0</span><br><span class="line">.</span><br><span class="line">├── bench			基于Microbenchmark（微基准测试）的代码测试模块</span><br><span class="line">├── compat			系统适配，大小端，字节操作部分重写，glibc特定函数判断处理。</span><br><span class="line">├── config			配置</span><br><span class="line">├── consensus		共识模块，merkle计算，分叉规则，一致性验证。</span><br><span class="line">├── crc32c			CRC-32C (Castagnoli)  算法是 iSCSI 和SCTP 数据校验的算法</span><br><span class="line">├── crypto			安全模块，加密算法，hash算法</span><br><span class="line">├── index			交易读写，查询交易数据并同步到leveldb；包括区块链数据索引基础类，其实现了CValidationInterface虚类。</span><br><span class="line">├── interfaces		接口模块：事件接口(handler)，钱包功能接口(chain（给client提供获取连状态，接收通知，费率计算，交易确认等接口）,wallet)，节点功能接口(node)；</span><br><span class="line">├── leveldb			nosql数据库</span><br><span class="line">├── logging</span><br><span class="line">├── node			在内存池和UTXO集合里查找coin，统计未花费交易输出，提交交易</span><br><span class="line">├── policy			费率标准，交易选取规则，交易规则参数定义，rbf交易选择；PS：交易流程：发起交易-&gt;交易池-&gt;交易桶-&gt;写入区块</span><br><span class="line">├── primitives		构建区块，输出和输入交易的签名验证</span><br><span class="line">├── qt				QT</span><br><span class="line">├── rpc				网络通信，json协议</span><br><span class="line">├── script			签名，交易溯源，交易脚本…</span><br><span class="line">├── secp256k1		椭圆曲线数字签名算法</span><br><span class="line">├── support			内存控制与管理，服务于内存池</span><br><span class="line">├── test			测试代码</span><br><span class="line">├── univalue		一致性</span><br><span class="line">├── util			杂乱项，client，server环境，时间，url，错误码等</span><br><span class="line">├── wallet			钱包类</span><br><span class="line">└── zmq				ZoreMQ 消息队列</span><br></pre></td></tr></table></figure>
+<h3><span id="221-p2p网络管理">2.2.1 P2P网络管理：</span></h3><p>addrdb：P2P网络地址数据库(peer.dat)，封禁地址(banlist.dat)；</p>
+<p>addman：存储在内存中的address，同时会一步dump到peer.dat</p>
+<p>Net：网络节点管理</p>
+<p>Net_processing：节点的通信操作，广播通知，状态验证等</p>
+<p>Netaddress：网络地址对象</p>
+<p>Netbase：网络通信基础类</p>
+<p>Protocol：网络通信协议</p>
+<p>Random：ssl随机数种子</p>
+<p>Timedata：P2P网络时间同步</p>
+<h3><span id="222-非对称密钥管理">2.2.2 非对称密钥管理</span></h3><p>Key：调用secp256k1的公私密钥处理</p>
+<p>Key_io：签名及加密后的重编码</p>
+<p>Keystore：密钥管理器</p>
+<p>Pubkey：公钥管理</p>
+<h3><span id="223-挖矿">2.2.3 挖矿</span></h3><p>Init：系统初始化，各个线程的初始化</p>
+<p>Txmempool：交易池</p>
+<p>merkleblock：生成merkletree 形式的block体</p>
+<p>miner：矿工从txpool选取tx到block准备写入</p>
+<p>Pow：工作量证明算法</p>
+<h3><span id="224-线程管理">2.2.4 线程管理</span></h3><p>Scheduler：线程调度器</p>
+<p>Sync：死锁处理</p>
+<p>ThreadInterrupt：线程中断</p>
+<h3><span id="225-链">2.2.5 链</span></h3><p>Chain：区块链对象，维护着整个链的状态及各种参数；</p>
+<p>Chainparams：区块链对象（防碰撞散列函数）的一些可调参数，包括主链，公有测试链，和私有链</p>
+<p>Chainparamsbase：区块链对象的基本参数</p>
+<p>Chainparamsseeds：P2P网络的DNS节点，用于解析及发现节点</p>
+<p>Checkpoints：chain index检查点</p>
+<h3><span id="226-算法">2.2.6 算法</span></h3><p>Base58：编码器；用于产生bitcoin钱包地址。相比Base64，Base58不使用数字”0”，字母大写”O”，字母大写”I”，和字母小写”l”，以及”+”和”/“符号</p>
+<p>Bench32：string编码器，base32变种 ，bech32为比特币地址格式</p>
+<p>Hash：sha-256哈希</p>
+<p>Compressor：输出脚本压缩编码</p>
+<p>bloom：布隆过滤器，O(1)复杂度的海量数据的查询过来算法，用于查找区块链数据；</p>
+<h3><span id="227-数据类型与类型转化">2.2.7 数据类型与类型转化</span></h3><p>amount：最大交易量，系统常量（CAmount MAX_MONEY = 21000000 * COIN)</p>
+<p>Arith_uint256：256-bit 无符号大整数</p>
+<p>Uint256：256bit不透明二进制对象</p>
+<p>amountarith_uint256：无符号大整数的模板基类</p>
+<p>limitedmap：限制类型（map）的哈希结构</p>
+<p>Undo：序列化与取消序列化</p>
+<p>Utilmoneystr：交易额转string</p>
+<p>Utilstrencoding：去掉string里的不安全字符</p>
+<p>Core_io：类型转化，hex，string，hash；tx对象与str对象的相互转化</p>
+<h3><span id="228-进程入口文件">2.2.8 进程入口文件</span></h3><p>Bitcoind：服务节点守护进程</p>
+<p>Bitcoin-cli：命令行客户端（rpc client）</p>
+<p>Bitcoin-tx：比特币交易处理程序</p>
+<p>bitcoin-wallet：钱包入口</p>
+<p>bitcoind：app初始化入口</p>
+<h3><span id="229-交易与区块相关">2.2.9 交易与区块相关</span></h3><p>Blockencodings：交易装填到区块中</p>
+<p>Checkqueue：待验证信息队列，主线程放入数据，多线程并行检查验证</p>
+<p>Coins： Unspent Transaction Output entry 即比特币交易的coin 实体，因为比特币每笔交易都是由UTXO而来</p>
+<p>psbt：PSBT功能实现；</p>
+<p>core_read：实际上是脚本解析，检查交易的所有输入和输出脚本是否包含有效码</p>
+<p>core_write</p>
+<p>Validation：确认接受新区块</p>
+<p>Versionbits：区块链版本维护</p>
+<h3><span id="2210-系统与网络">2.2.10 系统与网络</span></h3><p>Cuckoocache：基于cuckoo hash的内存cache</p>
+<p>compat：兼容32、64；window/linux</p>
+<p>memusage：监控内存使用情况</p>
+<p>net_permissions：网络权限参数控制</p>
+<p>Netmessagemaker</p>
+<p>threadsafety：线程安全</p>
+<p>torcontrol：洋葱网络控制，即匿名通信网络</p>
+<p>banman：检测peer的不当行为，然后禁用或者断开他们，防止破坏整个网络</p>
+<p>Httprpc：rpc的http封装，网页通信</p>
+<p>httpserver：通信服务端</p>
+<h3><span id="2211-重写与底层实现">2.2.11 重写与底层实现</span></h3><p>serialize：文件读写序列化</p>
+<p>span：实现C++20 std::span的功能</p>
+<p>optional：重写（替换）C++17的std::optional与std::make_optional</p>
+<p>tinyformat：一个类型安全的printf替换库</p>
+<p>streams：文件流</p>
+<p>reverse_iterator：反转</p>
+<p>reverselock：数据反锁；RAII-style反锁，构造时解锁，析构时加锁</p>
+<p>prevector：C++模板类，实现一个可变数组可存储N个元素，用于替换std::vector<t></t></p>
+<h3><span id="2212-接口">2.2.12 接口</span></h3><p>walletinitinterface：钱包抽象接口</p>
+<p>Ui_interface：ui接口</p>
+<p>validationinterface：区块校验接口；订阅由validation产生的事件</p>
+<p>二级：</p>
+<p>Dbwarpper：数据库上级接口</p>
+<p>Fs：文件操作接口</p>
+<h3><span id="2213-其他">2.2.13 其他</span></h3><p>outputtype：特殊输出类型，根据地址类型自动设置；</p>
+<p>rest：</p>
+<p>Txdb：DBview</p>
+<p>timedata：时间数据格式</p>
+<p>Utiltime：取得时间，时间格式转换</p>
+<p>Warnings：潜在错误</p>
+<p>blockfilter：概率数据结构，用于测试“membership”；序列化匹配“cfilter”消息；</p>
+<p>core_memusage</p>
+<p>dbwrapper</p>
+<p>dummywallet</p>
+<p>flatfile：文件管理</p>
+<p>indirectmap：用map映射指针型keys，但通过其解引用值进行比较的keys；</p>
+<p>Clientversion：客户端版本验证</p>
+<h2><span id="user-interfaces">User interfaces</span></h2><h3><span id="user-interfaces-gt-p2p">User interfaces &gt; P2P</span></h3><ul>
+<li>Bitcoin forms a TCP overlay network of nodes passing messages to one another<ul>
+<li>Messages defined in <code>src/protocol.h</code></li>
+</ul>
+</li>
+<li>Each node has a set of outbound and inbound peers they exchange data with<ul>
+<li><code>-addnode=&lt;addr&gt;</code></li>
+<li><code>-maxconnections=&lt;n&gt;</code></li>
+<li><code>net.h MAX_OUTBOUND_CONNECTIONS, DEFAULT_MAX_PEER_CONNECTIONS</code></li>
+</ul>
+</li>
+<li>Peers can be manually added (<code>-addnode</code>) or are discovered from DNS seeds: DNS servers that randomly resolve to known Bitcoin nodes</li>
+<li>DoS protection is implemented to prevent malicious peers from disrupting the network<ul>
+<li><code>-banscore=&lt;n&gt;</code> configures sensitivity, defaults to <code>100</code></li>
+</ul>
+</li>
+<li>SPV (simple payment verification) nodes retrieve txout proofs</li>
+</ul>
+<h3><span id="user-interfaces-gt-rpchttp">User interfaces &gt; RPC/HTTP</span></h3><p>A remote procedure call (RPC) interface allows users to programmatically interact with Bitcoin Core over HTTP</p>
+<ul>
+<li>Block explorers can query blockchain and mempool data</li>
+<li>External wallets can construct and sign transactions</li>
+<li>Miners and pool operators use <code>getblocktemplate</code> for block construction</li>
+<li><code>bitcoin-cli</code> provides a way to access this interface on the commandline</li>
+</ul>
+<h3><span id="user-interfaces-gt-qt">User interfaces &gt; Qt</span></h3><p>The Qt interface reveals</p>
+<ul>
+<li>wallet functionality</li>
+<li>basic network statistics</li>
+<li>RPC console</li>
+</ul>
+<p><img src="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Bitcoin-core-v0.10.0.png" alt="img"></p>
+<h3><span id="user-interfaces-gt-zmq">User interfaces &gt; ZMQ</span></h3><p>The ZMQ interface publishes notfications over a socket upon receipt of a</p>
+<ul>
+<li>new block (raw): <code>rawblock</code></li>
+<li>new block (hash): <code>hashblock</code></li>
+<li>new transaction (raw): <code>rawtx</code></li>
+<li>new transaction (hash): <code>hashtx</code></li>
+</ul>
+<p>which allows external software to perform some action on these events:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># From `contrib/zmq/zmq_sub.py`</span><br><span class="line"></span><br><span class="line">zmqSubSocket = self.zmqContext.socket(zmq.SUB)</span><br><span class="line">zmqSubSocket.setsockopt_string(zmq.SUBSCRIBE, <span class="string">&quot;hashblock&quot;</span>)</span><br><span class="line">msg = await zmqSubSocket.recv_multipart()</span><br><span class="line">topic, body, *_ = msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> topic == b<span class="string">&quot;hashblock&quot;</span>:</span><br><span class="line">    print(&#x27;saw hashblock&#x27;)</span><br><span class="line">    print(binascii.hexlify(body))</span><br></pre></td></tr></table></figure>
+<p>See also: <code>-blocknotify=&lt;cmd_str %s&gt;</code></p>
+<h2><span id="concurrency-model">Concurrency model</span></h2><ul>
+<li>Bitcoin Core performs a number of tasks simultaneously</li>
+<li>It has a model of concurrent execution to support this based on <code>&#123;std,boost&#125;::threads</code>, shared state, and a number of locks.</li>
+<li>Most threads are started (directly or indirectly) in <code>init.cpp</code></li>
+<li>P2P networking is enabled by a single <code>select</code> loop (<code>CConman::ThreadSocketHandler</code>)<ul>
+<li>We may replace <code>select</code> with <code>poll</code> (<a target="_blank" rel="noopener" href="https://github.com/bitcoin/bitcoin/pull/14336">#14336</a>) to avoid file descripter limits</li>
+</ul>
+</li>
+</ul>
+<p><strong>However,</strong></p>
+<p>all changes to chainstate are effectively single-threaded. Thanks, <code>cs_main</code>.</p>
+<h3><span id="concurrency-model-gt-threads">Concurrency model &gt; threads</span></h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Purpose</th>
+<th style="text-align:left"># threads</th>
+<th style="text-align:left">Task run</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Script verification</td>
+<td style="text-align:left"><code>nproc or 16</code>*</td>
+<td style="text-align:left"><code>ThreadScriptCheck()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Loading blocks</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadImport()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Servicing RPC calls</td>
+<td style="text-align:left">4*</td>
+<td style="text-align:left"><code>ThreadHTTP()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Load peer addresses from DNS seeds</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadDNSAddressSeed()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Send and receive messages to and from peers</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadSocketHandler()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Initializing network connections</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadOpenConnections()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Opening added network connections</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadOpenAddedConnections()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Process messages from <code>net</code> -&gt; <code>net_processing</code></td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadMessageHandler()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Tor control</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>TorControlThread()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Wallet notify (<code>-walletnotify</code>)</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">user-specified</td>
+</tr>
+<tr>
+<td style="text-align:left">txindex building</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadSync()</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Block notify (<code>-blocknotify</code>)</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">user-specified</td>
+</tr>
+<tr>
+<td style="text-align:left">Upnp connectivity</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>ThreadMapPort()</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>CScheduler</code> service queue (powers <code>ValidationInterface</code>)</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"><code>CScheduler::serviceQueue()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>* can be overridden</p>
+<h3><span id="concurrency-model-gt-validationinterface">Concurrency model &gt; <code>ValidationInterface</code></span></h3><p>Allows the asynchronous decoupling of chainstate events from various responses.</p>
+<p>Uses <code>SingleThreadedSchedulerClient</code> to queue responses and execute them out-of-band w.r.t. things like network communications, though still often blocked on lock acquisition, e.g. <code>cs_main</code>.</p>
+<p>Used (subclassed) for many things:</p>
+<ul>
+<li>Index building (<code>src/index/bash.h:BaseIndex</code>)</li>
+<li>Triggering announcements to peers (<code>net_processing:PeerLogicValidation</code>)</li>
+<li>Triggering wallet updates (<code>wallet/wallet.h:CWallet</code>)</li>
+<li>Sending ZMQ publications (<code>CZMQNotificationInterface</code>)</li>
+</ul>
+<p>Events you can make use of:</p>
+<ul>
+<li>UpdatedBlockTip</li>
+<li>TransactionAddedToMempool</li>
+<li>TransactionRemovedFromMempool</li>
+<li>BlockConnected</li>
+<li>BlockDisconnected</li>
+<li>ChainStateFlushed</li>
+<li>ResendWalletTransactions</li>
+<li>BlockChecked</li>
+<li>NewPoWValidBlock</li>
+</ul>
+<h2><span id="regions">Regions</span></h2><p>“Regions” of code (in my terms) consist of state and procedures necessary for Bitcoin’s operation.</p>
+<p>Each region is a subsystem within Bitcoin Core that handles a certain domain of tasks at a certain layer of abstraction.</p>
+<p>Starting here will give us a high-level but specified sense of which parts of the system do what tasks.</p>
+<h3><span id="regions-summary">Regions summary</span></h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>net</code></td>
+<td style="text-align:left">Handles socket networking, tracking of peers</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>net_processing</code></td>
+<td style="text-align:left">Routes P2P messages into validation calls and response P2P messages</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>validation</code></td>
+<td style="text-align:left">Defines how we update our validated state (chain, mempool)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>txmempool</code></td>
+<td style="text-align:left">Mempool data structures</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>coins &amp; txdb</code></td>
+<td style="text-align:left">Interface for in-memory view of the UTXO set</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>script/</code></td>
+<td style="text-align:left">Script execution and caching</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>consensus/</code></td>
+<td style="text-align:left">Consensus params, Merkle roots, some TX validation</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>policy/</code></td>
+<td style="text-align:left">Fee estimation, replace-by-fee</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>indexes/</code></td>
+<td style="text-align:left">Peripheral index building (e.g. <code>txindex</code>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>wallet/</code></td>
+<td style="text-align:left">Wallet db, coin selection, fee bumping</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>rpc/</code></td>
+<td style="text-align:left">Defines the RPC interface</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3><span id="regions-gt-net123hcpp125">Regions &gt; <code>net.&#123;h,cpp&#125;</code></span></h3><p><code>net</code> is the “bottom” of the Bitcoin core stack. It handles network communication with the P2P network.</p>
+<p>It contains addresses and statistics (<code>CNodeStats</code>) for peers (<code>CNode</code>s) that the running node is aware of.</p>
+<p><code>CConman</code> is the main class in this region - it manages socket connections (and network interaction more generally) for each peer, and forwards messages to the <code>net_processing</code> region (via <code>CConman::ThreadMessageHandler</code>).</p>
+<p>The globally-accessible <code>CConman</code> instance is called <code>g_conman</code>.</p>
+<h3><span id="regions-gt-net_processing123hcpp125">Regions &gt; <code>net_processing.&#123;h,cpp&#125;</code></span></h3><p><code>net_processing</code> adapts the network layer to the chainstate validation layer. It translates network messages into calls for local state changes.</p>
+<p>“Validation”-specific (i.e. information relating to chainstate) data is maintained per-node using <code>CNodeState</code> instances.</p>
+<p>Much of this region is <code>ProcessMessage()</code>: a giant conditional for rendering particular network message types to calls deeper into Bitcoin, e.g.</p>
+<ul>
+<li><code>NetMsgType::BLOCK</code> -&gt; <code>validation:ProcessNewBlock()</code></li>
+<li><code>NetMsgType::HEADERS</code> -&gt; <code>validation:ProcessNewBlockHeaders()</code></li>
+<li>…</li>
+</ul>
+<p>Peers are also penalized here based on the network messages they send (see <code>Misbehaving</code> and its usages).</p>
+<h3><span id="regions-gt-validation123hcpp125">Regions &gt; <code>validation.&#123;h,cpp&#125;</code></span></h3><p><code>validation</code> handles modifying in-memory data structures for chainstate and transactions (mempool) on the basis of certain acceptance rules.</p>
+<p>It both defines some of these data structures (<code>CChainState</code>, <code>mapBlockIndex</code>) as well as procedures for validating them, e.g. <code>CheckBlock()</code>.</p>
+<p>Oddly, it also contains some utility functions for marshalling data to and from disk, e.g. <code>ReadBlockFromDisk()</code>, <code>FlushStateToDisk()</code>, <code>&#123;Dump,Load&#125;Mempool()</code>. This is probably because <code>validation.&#123;h,cpp&#125;</code> is the result of refactoring <code>main.&#123;h,cpp&#125;</code> into smaller pieces.</p>
+<p>It contains the instantiation of the infamous <code>cs_main</code> lock.</p>
+<p><img src="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/validation.png" alt="validation"></p>
+<h3><span id="regions-gt-txmempool123hcpp125">Regions &gt; <code>txmempool.&#123;h,cpp&#125;</code></span></h3><p><code>txmempool</code> provides a definition for the in-memory data structure that manages the set of transactions this node has seen, <code>CTxMempool</code>.</p>
+<p>This data structure provides a helpful view of transactions sorted in various ways (e.g. by fee rate, txid, entry time, fee rate with ancestors). See <code>CTxMempool::indexed_transaction_set</code>.</p>
+<p>The mempool is a fixed size, so eviction logic is defined here too.</p>
+<p>An index of the UTXO set which includes unconfirmed mempool transactions is also defined here (<code>CCoinsViewMemPool</code>).</p>
+<p>This region is used in <code>validation</code>. <code>src/policy</code> (fee estimation), <code>miner</code>, and others.</p>
+<h3><span id="regions-gt-coins123hcpp125-amp-txdb123hcpp125">Regions &gt; <code>coins.&#123;h,cpp&#125; &amp; txdb.&#123;h,cpp&#125;</code></span></h3><p><img src="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/ccoinsview.png" alt="CDBWrapper hierarchy"></p>
+<p>Basically, they just provide this interface:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Abstract view on the open txout dataset. */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CCoinsView</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">/** Retrieve the Coin (unspent transaction output) for a given outpoint.</span></span><br><span class="line"><span class="comment">     *  Returns true only when an unspent coin was found, which is returned in coin.</span></span><br><span class="line"><span class="comment">     *  When false is returned, coin&#x27;s value is unspecified.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">GetCoin</span><span class="params">(<span class="keyword">const</span> COutPoint &amp;outpoint, Coin &amp;coin)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Just check whether a given outpoint is unspent.</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">HaveCoin</span><span class="params">(<span class="keyword">const</span> COutPoint &amp;outpoint)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//! Retrieve the block hash whose state this CCoinsView currently represents</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> uint256 <span class="title">GetBestBlock</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="regions-gt-dbwrapper123hcpp125">Regions &gt; <code>dbwrapper.&#123;h,cpp&#125;</code></span></h3><p>Abstracts access to leveldb databases.</p>
+<p>Adds ability to obfuscate data - we do this to avoid spurious anti-virus detection and illegal data in the chainstate getting people in trouble.</p>
+<p><img src="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/cdbwrapper.png" alt="CDBWrapper hierarchy"></p>
+<h3><span id="regions-gt-script">Regions &gt; <code>script/</code></span></h3><p>The <code>script</code> subtree contains procedures for defining and executing Bitcoin scripts, as well as signing transactions (<code>script/sign.*</code>).</p>
+<p>It also maintains data structures which cache script execution and signature verification (<code>script/sigcache.*</code>).</p>
+<p>Script evaluation happens in <code>script/interpreter.cpp::EvalScript()</code>.</p>
+<h3><span id="regions-gt-consensus">Regions &gt; <code>consensus/</code></span></h3><p>Contains procedures for obviously consensus-critical actions like computing Merkle trees, checking transaction validity.</p>
+<p>Contains chain validation parameters, e.g. <code>Params::BIP66Height, nMinimumChainWork</code>.</p>
+<p>Defines BIP9 deployment description struct (<code>consensus/params.h:BIP9Deployment</code>).</p>
+<p><code>CValidationState</code> is defined in <code>consensus/validation.h</code> and is used broadly (but mostly in <code>validation</code>) as a small piece of state that tracks validity and likelihood of DoS when examining blocks.</p>
+<h3><span id="regions-gt-policy">Regions &gt; <code>policy/</code></span></h3><p>Policy contains logic for making various assessments about transactions (does this tx signal replace-by-fee?).</p>
+<p>It contains logic for doing fee estimation (<code>policy/fees.*</code>).</p>
+<h3><span id="regions-gt-interfaces">Regions &gt; <code>interfaces/</code></span></h3><p>Defines interfaces for interacting with the major subsystems in Bitcoin: node, wallet, GUI (eventually).</p>
+<p>This is part of an ongoing effort by Russ Yanofsky to decompose the different parts of Bitcoin into separate systems that communicate using more formalized messages.</p>
+<p>Eventually, we might be able to break Bitcoin Core into a few smaller repositories which can be maintained at different cadences.</p>
+<h3><span id="regions-gt-wallet">Regions &gt; <code>wallet/</code></span></h3><p>Contains</p>
+<ul>
+<li>logic for marshalling wallet data to and from disk via BerkeleyDB.</li>
+<li>utilities for fee-bumping transactions.</li>
+<li>doing coin selection.</li>
+<li>RPC interface for the wallet.</li>
+<li>bookkeeping for wallet owners (<code>CWalletTx</code>, address book) .</li>
+</ul>
+<h3><span id="regions-gt-qt">Regions &gt; <code>qt/</code></span></h3><p>Contains all the code for doing the graphical user interface.</p>
+<p><code>qt/bitcoin.cpp:main()</code> is an alternate entrypoint for starting Bitcoin.</p>
+<h3><span id="regions-gt-rpc">Regions &gt; <code>rpc/</code></span></h3><p>Defines RPC interface and provides related utilities (<code>UniValue</code> mangling).</p>
+<h4><span id="example">Example</span></h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> UniValue <span class="title">getconnectioncount</span><span class="params">(<span class="keyword">const</span> JSONRPCRequest&amp; request)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (request.fHelp || request.params.size() != <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="built_in">std</span>::runtime_error(</span><br><span class="line">            <span class="string">&quot;getconnectioncount\n&quot;</span></span><br><span class="line">            <span class="string">&quot;\nReturns the number of connections to other nodes.\n&quot;</span></span><br><span class="line">            <span class="string">&quot;\nResult:\n&quot;</span></span><br><span class="line">            <span class="string">&quot;n          (numeric) The connection count\n&quot;</span></span><br><span class="line">            <span class="string">&quot;\nExamples:\n&quot;</span></span><br><span class="line">            + HelpExampleCli(<span class="string">&quot;getconnectioncount&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">            + HelpExampleRpc(<span class="string">&quot;getconnectioncount&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!g_connman)</span><br><span class="line">        <span class="keyword">throw</span> JSONRPCError(RPC_CLIENT_P2P_DISABLED, <span class="string">&quot;Error: Peer-to-peer functionality missing or disabled&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">int</span>)g_connman-&gt;GetNodeCount(CConnman::CONNECTIONS_ALL);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Then referenced in <code>Register.*RPCCommands()</code> later.</p>
+<h3><span id="regions-gt-miner123hcpp125">Regions &gt; <code>miner.&#123;h,cpp&#125;</code></span></h3><p>Includes utilities for generating blocks to be mined (e.g. <code>BlockAssembler</code>). Used in conjunction with <code>rpc/mining.cpp</code> by miners:</p>
+<ul>
+<li><code>getblocktemplate</code></li>
+<li><code>submitblock</code></li>
+</ul>
+<h3><span id="regions-gt-zmq">Regions &gt; <code>zmq/</code></span></h3><p>Registers events with <code>ValidationInterface</code> to forward on notifications about new blocks and transactions to ZMQ sockets.</p>
+<h2><span id="storage">Storage</span></h2><h3><span id="tree-~bitcoinregtest"><code>$ tree ~/.bitcoin/regtest/</code></span></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">├── banlist.dat</span><br><span class="line">├── blocks</span><br><span class="line">│   ├── blk00000.dat</span><br><span class="line">│   ├── index</span><br><span class="line">│   │   ├── 000005.ldb</span><br><span class="line">│   │   ├── 000006.log</span><br><span class="line">│   │   ├── CURRENT</span><br><span class="line">│   │   ├── LOCK</span><br><span class="line">│   │   └── MANIFEST-000004</span><br><span class="line">│   └── rev00000.dat</span><br><span class="line">├── chainstate</span><br><span class="line">│   ├── 000005.ldb</span><br><span class="line">│   ├── 000006.log</span><br><span class="line">│   ├── CURRENT</span><br><span class="line">│   ├── LOCK</span><br><span class="line">│   └── MANIFEST-000004</span><br><span class="line">├── debug.log</span><br><span class="line">├── fee_estimates.dat</span><br><span class="line">├── indexes</span><br><span class="line">│   └── txindex</span><br><span class="line">│       ├── 000003.log</span><br><span class="line">│       ├── CURRENT</span><br><span class="line">│       ├── LOCK</span><br><span class="line">│       └── MANIFEST-000002</span><br><span class="line">├── mempool.dat</span><br><span class="line">├── peers.dat</span><br><span class="line">└── wallets</span><br><span class="line">    ├── db.log</span><br><span class="line">    └── wallet.dat</span><br></pre></td></tr></table></figure>
+<h3><span id="storage-gt-dat-files">Storage &gt; <code>.dat</code> files</span></h3><p>Bitcoin stores some data in <code>.dat</code> files, which are just the raw bytes of some serialized data structure.</p>
+<p>See <code>serialize.h</code> for details on how serialization often works.</p>
+<p><strong>A brief digression into serialization</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CBlockHeader</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// header</span></span><br><span class="line">    <span class="keyword">int32_t</span> nVersion;</span><br><span class="line">    uint256 hashPrevBlock;</span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    ADD_SERIALIZE_METHODS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Stream, <span class="keyword">typename</span> Operation&gt;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">SerializationOp</span><span class="params">(Stream&amp; s, Operation ser_action)</span> </span>&#123;</span><br><span class="line">        READWRITE(<span class="keyword">this</span>-&gt;nVersion);</span><br><span class="line">        READWRITE(hashPrevBlock);</span><br><span class="line">        READWRITE(hashMerkleRoot);</span><br><span class="line">        READWRITE(nTime);</span><br><span class="line">        READWRITE(nBits);</span><br><span class="line">        READWRITE(nNonce);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>blocks/blk?????.dat</code></strong>: serialized block data<ul>
+<li><code>validation.cpp:WriteBlockToDisk()</code></li>
+<li><code>src/primitives/block.h:CBlock::SerializationOp()</code></li>
+</ul>
+</li>
+<li><strong><code>blocks/rev?????.dat</code></strong>: “undo” data — UTXOs added and removed by a block<ul>
+<li><code>validation.cpp:UndoWriteToDisk()</code></li>
+<li><code>src/undo.h:CTxUndo</code></li>
+</ul>
+</li>
+<li><strong><code>mempool.dat</code></strong>: serialized list of mempool contents<ul>
+<li><code>src/txmempool.cpp:CTxMemPool::infoAll()</code></li>
+<li>Dumped in <code>src/init.cpp:Shutdown()</code></li>
+</ul>
+</li>
+<li><strong><code>peers.dat</code></strong>: serialized peers<ul>
+<li><code>src/addrmah.h::CAddrMan::Serialize()</code></li>
+</ul>
+</li>
+<li><strong><code>banlist.dat</code></strong>: banned node IPs/subnets<ul>
+<li>See <code>src/addrdb.cpp</code> for serialization details</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">$ tree ~&#x2F;.bitcoin&#x2F;regtest&#x2F;</span><br><span class="line">├── banlist.dat</span><br><span class="line">├── blocks</span><br><span class="line">│   ├── blk00000.dat</span><br><span class="line">│   ├── index</span><br><span class="line">│   │   ├── 000005.ldb</span><br><span class="line">│   │   ├── 000006.log</span><br><span class="line">│   │   ├── CURRENT</span><br><span class="line">│   │   ├── LOCK</span><br><span class="line">│   │   └── MANIFEST-000004</span><br><span class="line">│   └── rev00000.dat</span><br><span class="line">├── chainstate</span><br><span class="line">│   ├── 000005.ldb</span><br><span class="line">│   ├── 000006.log</span><br><span class="line">│   ├── CURRENT</span><br><span class="line">│   ├── LOCK</span><br><span class="line">│   └── MANIFEST-000004</span><br><span class="line">├── debug.log</span><br><span class="line">...</span><br><span class="line">├── fee_estimates.dat</span><br><span class="line">├── indexes</span><br><span class="line">│   └── txindex</span><br><span class="line">│       ├── 000003.log</span><br><span class="line">│       ├── CURRENT</span><br><span class="line">│       ├── LOCK</span><br><span class="line">│       └── MANIFEST-000002</span><br><span class="line">├── mempool.dat</span><br><span class="line">├── peers.dat</span><br><span class="line">└── wallets</span><br><span class="line">    ├── db.log</span><br><span class="line">    └── wallet.dat</span><br></pre></td></tr></table></figure>
+<h3><span id="storage-gt-leveldb">Storage &gt; leveldb</span></h3><p>Leveldb is a fast, sorted key value store used for a few things in Bitcoin.</p>
+<p>It allows bulk writes and snapshots.</p>
+<p>It is bundled with the source tree in <code>src/leveldb/</code> and maintained in <a target="_blank" rel="noopener" href="https://github.com/bitcoin-core/leveldb"><code>bitcoin-core/leveldb</code></a>.</p>
+<ul>
+<li><p><code>blocks/index</code>: the complete tree of valid(ish) blocks the node has seen</p>
+<ul>
+<li>Serializes <code>mapBlockIndex</code>, or a list of <code>CBlockIndex</code>es</li>
+<li><code>CBlockIndex</code> is a block header plus some important metadata, for example validation status of the block (<code>nStatus</code>) and position on disk (<code>nFile</code>/<code>nDataPos</code>)</li>
+</ul>
+</li>
+<li><p><code>chainstate/</code>: holds UTXO set</p>
+<ul>
+<li><code>COutPoint</code>-&gt;<code>CCoinsCacheEntry</code><ul>
+<li>Basically <code>(txid, index) -&gt; Coin</code> (i.e. [CTxOut, is_coinbase, height])</li>
+</ul>
+</li>
+<li><code>CCoinsViewCache::BatchWrite()</code></li>
+</ul>
+</li>
+</ul>
+<h3><span id="storage-gt-berkeleydb">Storage &gt; berkeleydb</span></h3><p>BerkeleyDB is basically like leveldb but <a target="_blank" rel="noopener" href="https://bitcoin.stackexchange.com/a/51446">worse</a>.</p>
+<p>We still use it for the wallet.</p>
+<p>Some want to replace it with SQLite.</p>
+<ul>
+<li>Wallet<ul>
+<li><code>wallets/wallet.dat</code>: BerkeleyDB wallet file<ul>
+<li><code>src/wallet/db.cpp</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1><span id="data-structures">Data structures</span></h1><p>The storage formats we just covered are deserialized into in-memory data structures during runtime.</p>
+<p>Here are a few of the important ones.</p>
+<h3><span id="data-structures-gt-chainstate-gt-blocks">Data structures &gt; chainstate &gt; blocks</span></h3><h5><span id="srcprimitivesblockhcblockheader"><code>src/primitives/block.h:CBlockHeader</code></span></h5><p>The block header attributes you know and love: <code>nVersion, hashPrevBlock, hashMerkleRoot, nTime, nBits, nNonce</code>.</p>
+<h5><span id="srcprimitivesblockhcblock"><code>src/primitives/block.h:CBlock</code></span></h5><p>It’s <code>CBlockHeader</code>, but with transactions attached.</p>
+<h5><span id="srcprimitivesblockhcblocklocator"><code>src/primitives/block.h:CBlockLocator</code></span></h5><p>A list of &lt;32 block hashes starting with a given block and going back through a chain in sort-of logarithmic distribution.</p>
+<p>Used to quickly find the divergence point between two tips.</p>
+<p>Construction logic lives in <a target="_blank" rel="noopener" href="https://jameso.be/dev++2018/"><code>src/chain.cpp:CChain::GetLocator()</code></a>.</p>
+<h5><span id="srcchainhcblockindex"><code>src/chain.h:CBlockIndex</code></span></h5><p>A block header plus some important metadata, for example validation status of the block (<code>nStatus</code>) and position on disk (<code>nFile</code>/<code>nDataPos</code>)</p>
+<p>The entire blockchain (and orphaned, invalid parts of the tree) is stored this way.</p>
+<h3><span id="data-structures-gt-chainstate-gt-cchainstate">Data structures &gt; chainstate &gt; <code>CChainState</code></span></h3><p>Defined in <code>validation</code>. Contains logic and storage for maintaining the <code>activeChain</code>, the most-work valid chain.</p>
+<p><code>mapBlockIndex</code> is an attribute.</p>
+<p>Makes liberal use of <code>cs_main</code>.</p>
+<p><code>ActivateBestChain&#123;Step&#125;()</code> contains logic for incorporating new blocks and setting the most-work chain.</p>
+<p><code>AddToBlockIndex()</code> incorporates all block headers encountered.</p>
+<h2><span id="exploring-the-codebase">Exploring the codebase</span></h2><ul>
+<li>Ensure your editor is setup with goto-definition, find-usages functionality<ul>
+<li>rtags is very helpful; hooks into LLVM to generate symbol information<ul>
+<li>good rtags setup guide by @eklitzke <a target="_blank" rel="noopener" href="https://eklitzke.org/using-emacs-and-rtags-with-autotools-c++-projects">here</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Bitcoin’s <a target="_blank" rel="noopener" href="https://dev.visucore.com/bitcoin/doxygen/">doxygen output</a></li>
+<li>Read <code>doc/developer-notes.md</code></li>
+</ul>
+<p><img src="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/doxygen.png" alt="img"><br><em>Doxygen output</em></p>
+<hr>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jameso.be/dev++2018/#1">https://jameso.be/dev++2018/#1</a><br><a target="_blank" rel="noopener" href="http://diyhpl.us/wiki/transcripts/scalingbitcoin/tokyo-2018/edgedevplusplus/overview-bitcoin-core-architecture/">http://diyhpl.us/wiki/transcripts/scalingbitcoin/tokyo-2018/edgedevplusplus/overview-bitcoin-core-architecture/</a><br><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903598522892302">https://juejin.cn/post/6844903598522892302</a></p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Bitcoin 架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Bitcoin Core 代码结构分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">2.2.1 P2P网络管理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">2.2.2 非对称密钥管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">2.2.3 挖矿</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">2.2.4 线程管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">2.2.5 链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.7.</span> <span class="toc-text">2.2.6 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.8.</span> <span class="toc-text">2.2.7 数据类型与类型转化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.9.</span> <span class="toc-text">2.2.8 进程入口文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.10.</span> <span class="toc-text">2.2.9 交易与区块相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.11.</span> <span class="toc-text">2.2.10 系统与网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.12.</span> <span class="toc-text">2.2.11 重写与底层实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.13.</span> <span class="toc-text">2.2.12 接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.14.</span> <span class="toc-text">2.2.13 其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">User interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">User interfaces &gt; P2P</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">User interfaces &gt; RPC&#x2F;HTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">User interfaces &gt; Qt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.4.</span> <span class="toc-text">User interfaces &gt; ZMQ</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Concurrency model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Concurrency model &gt; threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Concurrency model &gt; ValidationInterface</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Regions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Regions summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Regions &gt; net.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Regions &gt; net_processing.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">Regions &gt; validation.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.5.</span> <span class="toc-text">Regions &gt; txmempool.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.6.</span> <span class="toc-text">Regions &gt; coins.&amp;#123;h,cpp&amp;#125; &amp; txdb.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.7.</span> <span class="toc-text">Regions &gt; dbwrapper.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.8.</span> <span class="toc-text">Regions &gt; script&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.9.</span> <span class="toc-text">Regions &gt; consensus&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.10.</span> <span class="toc-text">Regions &gt; policy&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.11.</span> <span class="toc-text">Regions &gt; interfaces&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.12.</span> <span class="toc-text">Regions &gt; wallet&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.13.</span> <span class="toc-text">Regions &gt; qt&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.14.</span> <span class="toc-text">Regions &gt; rpc&#x2F;</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">5.14.1.</span> <span class="toc-text">Example</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.15.</span> <span class="toc-text">Regions &gt; miner.&amp;#123;h,cpp&amp;#125;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.16.</span> <span class="toc-text">Regions &gt; zmq&#x2F;</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">$ tree ~&#x2F;.bitcoin&#x2F;regtest&#x2F;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Storage &gt; .dat files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Storage &gt; leveldb</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.4.</span> <span class="toc-text">Storage &gt; berkeleydb</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number"></span> <span class="toc-text">Data structures</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">0.1.</span> <span class="toc-text">Data structures &gt; chainstate &gt; blocks</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.1.</span> <span class="toc-text">src&#x2F;primitives&#x2F;block.h:CBlockHeader</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.2.</span> <span class="toc-text">src&#x2F;primitives&#x2F;block.h:CBlock</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.3.</span> <span class="toc-text">src&#x2F;primitives&#x2F;block.h:CBlockLocator</span></a></li><li class="toc-item toc-level-5"><a class="toc-link"><span class="toc-number">0.1.0.4.</span> <span class="toc-text">src&#x2F;chain.h:CBlockIndex</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">0.2.</span> <span class="toc-text">Data structures &gt; chainstate &gt; CChainState</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Exploring the codebase</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&text=bitcoin core 源码分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&is_video=false&description=bitcoin core 源码分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=bitcoin core 源码分析&body=Check out this article: https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&title=bitcoin core 源码分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.lzphi.cn/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/&name=bitcoin core 源码分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 LuoZui
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">简介</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="//github.com/luozui">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
+<!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+
+
+

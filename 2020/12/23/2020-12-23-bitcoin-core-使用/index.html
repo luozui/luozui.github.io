@@ -14,7 +14,7 @@
 <meta property="og:description" content="介绍Bitcoin Core 是中本聪发起的最原始的bitcoin软件客户端的开源项目，开源地址：https:&#x2F;&#x2F;github.com&#x2F;bitcoin 编译版下载地址 https:&#x2F;&#x2F;bitcoincore.org&#x2F;en&#x2F;download&#x2F; 使用Linux 安装 官网有编译的二进制文件，下载后加压添加PATH即可 1234wget https:&#x2F;&#x2F;bitcoincore.org&#x2F;bin&#x2F;bitco">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-23T08:27:35.000Z">
-<meta property="article:modified_time" content="2020-12-23T14:52:30.996Z">
+<meta property="article:modified_time" content="2020-12-26T08:01:35.191Z">
 <meta property="article:author" content="LuoZui">
 <meta property="article:tag" content="bitcoin coure">
 <meta name="twitter:card" content="summary">
@@ -79,6 +79,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" href="/2020/12/26/2020-12-24-bitcoin-core-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2020/12/20/Tangleanalysis/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -164,14 +166,25 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bitcoind -maxconnections=256 -prune=550		# 命令模式</span><br><span class="line">bitcoind-qt -maxconnections=256 -prune=550	# GUI，和bitcoind不能同时运行</span><br></pre></td></tr></table></figure>
 <p><code>maxconnections</code>是最大连接数，<code>prune &gt;= 550</code> 表示自动剪枝。剪枝模式下最终只占用 4.7G 空间，数据保存在<code>~/.bitcoin/</code> 。</p>
 <p>因为需要下载300多个G的数据并验证，所以需要很长的时间，我花了2天。<em>这里吐槽一下，验证需要从创世纪块开始下载所有完整的block，绝对是Bitcoin设计的一个缺陷，因为将UTXO集合的hash打包到block中的话，验证过程只需要下载block hader就行了。</em></p>
+<blockquote>
+<p>bitcoind 命令 <a target="_blank" rel="noopener" href="https://mistydew.github.io/blog/2018/05/running-bitcoin.html">https://mistydew.github.io/blog/2018/05/running-bitcoin.html</a></p>
+<p>bitcoind 提供的RPC接口 <a target="_blank" rel="noopener" href="https://bitcoincore.org/en/doc/0.20.0/">https://bitcoincore.org/en/doc/0.20.0/</a> ，在本地可以使用 bitcoin-cli 调用</p>
+</blockquote>
 <h2><span id="utxo">UTXO</span></h2><p>Bitcoin Core 将 UTXO 保存在 levelDB 中，路径为 <code>~/.bitcoin/chainstate</code>，格式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    type                          txid (little-endian)                      index (varint)</span><br><span class="line">        \                               |                                  &#x2F;</span><br><span class="line">        &lt;&gt;&lt;--------------------------------------------------------------&gt;&lt;&gt;</span><br><span class="line"> key:   430000155b9869d56c66d9e86e3c01de38e3892a42b99949fe109ac034fff6583900</span><br><span class="line"></span><br><span class="line"> value: 71a9e87d62de25953e189f706bcf59263f15de1bf6c893bda9b045 &lt;- obfuscated</span><br><span class="line">        b12dcefd8f872536b12dcefd8f872536b12dcefd8f872536b12dce &lt;- extended obfuscateKey</span><br><span class="line">        c0842680ed5900a38f35518de4487c108e3810e6794fb68b189d8b &lt;- deobfuscated (XOR)</span><br><span class="line">        &lt;----&gt;&lt;----&gt;&lt;&gt;&lt;--------------------------------------&gt;</span><br><span class="line">         &#x2F;      |    \                   |</span><br><span class="line">    varint   varint   varint          script &lt;- P2PKH&#x2F;P2SH hash160, P2PK public key, or complete script</span><br><span class="line">       |        |     nSize</span><br><span class="line">       |        |</span><br><span class="line">       |     amount (compressesed)</span><br><span class="line">       |</span><br><span class="line">       |</span><br><span class="line">100000100001010100110</span><br><span class="line">&lt;------------------&gt; \</span><br><span class="line">       height         coinbase</span><br></pre></td></tr></table></figure>
-<p>由于它的 <code>key</code> 是一个三元组 <code>&lt;type [0], txid [1:33], vout [33:]&gt;</code> 。</p>
+<p>它的 <code>key</code> 是一个三元组 <code>&lt;type [0], txid [1:33], vout [33:]&gt;</code> </p>
 <p>然而 bitcoin core 并没有设计查询UTXO的API，只能使用一些开源的库来读取levelDB中的UTXO，但是需要将key和value格式化一下。</p>
-<p>这里有一个遍历 UTXO levelDB 为 csv 的一个工具 <a target="_blank" rel="noopener" href="https://github.com/in3rsha/bitcoin-utxo-dump。使用之前需要先用bitcoind同步完主链的UTXO数据，使用如下参数转换">https://github.com/in3rsha/bitcoin-utxo-dump。使用之前需要先用bitcoind同步完主链的UTXO数据，使用如下参数转换</a><br><code>bitcoin-utxo-dump -f count,txid,vout,height,coinbase,amount,nsize,script,type,address</code><br>转换之后的csv文件为12个G</p>
+<p>这里有一个遍历 UTXO levelDB 为 csv 的一个工具 <a target="_blank" rel="noopener" href="https://github.com/in3rsha/bitcoin-utxo-dump">https://github.com/in3rsha/bitcoin-utxo-dump</a> 。使用之前需要先用bitcoind同步完主链的UTXO数据，使用如下参数转换<br><code>bitcoin-utxo-dump -f count,txid,vout,height,coinbase,amount,nsize,script,type,address</code><br>转换之后的csv文件为12个G</p>
 <hr>
 <p>参考</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ztemt_sw2/article/details/81101717">https://blog.csdn.net/ztemt_sw2/article/details/81101717</a></p>
+<p>RPC DOC <a target="_blank" rel="noopener" href="https://bitcoincore.org/en/doc/0.20.0/">https://bitcoincore.org/en/doc/0.20.0/</a></p>
+<p>Bitcoin Core 源码结构</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903636204519438">https://juejin.cn/post/6844903636204519438</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/lisemi/article/details/103324989">https://blog.csdn.net/lisemi/article/details/103324989</a></li>
+</ul>
+<p>使用 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_34357436/article/details/92710312">https://blog.csdn.net/weixin_34357436/article/details/92710312</a></p>
 
   </div>
 </article>
